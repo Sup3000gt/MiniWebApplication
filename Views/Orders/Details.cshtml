@@ -1,0 +1,31 @@
+﻿@model MiniWebApplication.Models.Order
+
+<h1 class="cart-title">Order Details</h1>
+
+<p><strong>Order ID:</strong> @Model.OrderId</p>
+<p><strong>Order Date:</strong> @Model.OrderDate.ToString("g")</p>
+<p><strong>Total Amount:</strong> @Model.TotalAmount.ToString("C")</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var detail in Model.OrderDetails)
+        {
+            <tr>
+                <td>@detail.Product.Name</td>
+                <td>@detail.Quantity</td>
+                <td>@detail.Price.ToString("C")</td>
+                <td>@((detail.Quantity * detail.Price).ToString("C"))</td> 
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="@Url.Action("Index", "Orders")" class="btn btn-secondary">Back to Orders</a>

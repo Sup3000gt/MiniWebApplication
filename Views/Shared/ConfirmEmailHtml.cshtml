@@ -1,0 +1,12 @@
+﻿@model MiniWebApplication.ViewModels.EmailViewModel
+
+@{
+    Layout = null;
+}
+
+<p>Dear @Model.FirstName,</p>
+<p>Thank you for registering at <strong>Alan's Dish Dash Web Application</strong>! We're excited to have you on board.</p>
+<p>Please confirm your email address by clicking the link below within 24 hours:</p>
+<p><a href="@Model.ConfirmationLink">Confirm Your Email Address</a></p>
+<p>If you did not create an account, please ignore this email.</p>
+<p>Best regards,<br />Alan</p>

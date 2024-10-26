@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = "Email Confirmed";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="card p-4 text-center shadow" style="width: 400px; background-color: rgba(255, 255, 255, 0.7); border-radius: 15px;">
+            <div class="card-body">
+                <h2 class="card-title text-success">Email Confirmed!</h2>
+                <p class="card-text mt-3">Your email has been successfully confirmed.</p>
+                <a href="@Url.Action("Login", "Account")" class="btn btn-primary mt-3">Log In Now</a>
+            </div>
+        </div>
+    </div>
+</div>

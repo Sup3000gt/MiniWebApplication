@@ -1,0 +1,76 @@
+﻿@model MiniWebApplication.ViewModels.RegisterViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Register";
+}
+
+<div class="register-container">
+    <h2>Register</h2>
+    <form asp-action="Register" method="post">
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <label>Email:</label>
+            <input asp-for="Email" type="email" class="form-control" required />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label>Username:</label>
+            <input asp-for="Username" type="text" class="form-control" required />
+            <span asp-validation-for="Username" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label>Password:</label>
+            <input asp-for="Password" type="password" class="form-control" required />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label>First Name:</label>
+            <input asp-for="FirstName" type="text" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Last Name:</label>
+            <input asp-for="LastName" type="text" class="form-control" />
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.PhoneNumber)
+            <input asp-for="PhoneNumber" class="form-control" id="PhoneNumber" placeholder="(123) 456-7890" required />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DateOfBirth"></label>
+            <input asp-for="DateOfBirth" type="text" class="form-control" />
+            <small class="form-text text-muted">Please enter your date of birth in mm/dd/yyyy format.</small>
+            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+        </div>
+
+
+        <button type="submit" class="btn btn-primary mt-3">Register</button>
+
+    </form>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <!-- Include jQuery (if not already included) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Include Inputmask (correct version) -->
+    <script src="https://cdn.jsdelivr.net/npm/inputmask@5.0.6/dist/jquery.inputmask.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#PhoneNumber').inputmask({
+                mask: '(999)999-9999',
+                placeholder: '',
+                showMaskOnHover: false,
+                showMaskOnFocus: true,
+                clearMaskOnLostFocus: true,
+                autoUnmask: false
+            });
+        });
+    </script>
+}

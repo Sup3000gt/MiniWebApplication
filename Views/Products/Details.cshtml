@@ -1,0 +1,54 @@
+﻿@model MiniWebApplication.Models.Product
+
+@{
+    ViewData["Title"] = "Product Details";
+}
+
+<div class="container product-details">
+    <div class="row align-items-center">
+        <!-- Product Image Section -->
+        <div class="col-md-6">
+            <img src="@Url.Content(Model.ImageUrl)" alt="@Model.Name" class="img-fluid rounded product-image" />
+        </div>
+
+        <!-- Product Information Section -->
+        <div class="col-md-6">
+            <div class="info-box p-4">
+                <h1 class="product-title">@Model.Name</h1>
+                <p class="product-description">@Model.Description</p>
+                <p class="product-price">Price: <strong>@Model.Price.ToString("C")</strong></p>
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <form asp-controller="ShoppingCart" asp-action="AddToCart" method="post">
+                        <input type="hidden" name="productId" value="@Model.ProductId" />
+
+                        <div class="form-group">
+                            <label for="quantity" class="quantity-label">Quantity:</label>
+                            <select name="quantity" id="quantity" class="form-control quantity-select">
+                                @for (int i = 1; i <= 20; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-warning mt-3">
+                            <i class="fas fa-cart-plus"></i> Add to Cart
+                        </button>
+                    </form>
+                }
+                else
+                {
+                    <a href="@Url.Action("Login", "Account")" class="btn btn-primary mt-3">
+                        <i class="fas fa-sign-in-alt"></i> Login to Add to Cart
+                    </a>
+                }
+
+                <a href="@Url.Action("Index", "Products")" class="btn btn-secondary mt-3">
+                    <i class="fas fa-arrow-left"></i> Back to Products
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

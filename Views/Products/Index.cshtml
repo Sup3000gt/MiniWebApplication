@@ -1,0 +1,47 @@
+﻿@model IEnumerable<MiniWebApplication.Models.Product>
+
+@{
+    ViewData["Title"] = "Products";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Ensure this points to the correct layout file
+}
+
+<h1 class="cart-title">Products</h1>
+
+@* Add New Product Button *@
+@if (User.Identity.IsAuthenticated)
+{
+    <a asp-action="Create" class="btn btn-success mb-3">Add New Product</a>
+}
+
+<div class="row">
+    @foreach (var product in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="@Url.Content(product.ImageUrl)" class="card-img-top" alt="@product.Name" />
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">@product.Name</h5>
+                    <p class="card-text">@product.Description</p>
+                    <p class="card-text">Price: @product.Price.ToString("C")</p>
+                    <div class="mt-auto">
+                        <a asp-action="Details" asp-route-id="@product.ProductId" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Pagination Section -->
+<div class="d-flex justify-content-center">
+    <nav>
+        <ul class="pagination">
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>

@@ -1,0 +1,77 @@
+﻿@model IEnumerable<Product>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Welcome";
+
+    var currentPage = ViewData["CurrentPage"] as int? ?? 1;
+    var totalPages = ViewData["TotalPages"] as int? ?? 1;
+    var searchQuery = ViewData["SearchQuery"] as string ?? string.Empty;
+    var isSearchExecuted = ViewData["IsSearchExecuted"] as bool? ?? false;
+}
+
+<!-- Hero Section -->
+<div class="hero-section d-flex justify-content-start align-items-center flex-column" style="height: 90vh; background: transparent;">
+    <!-- Wrapper for MSSA Text and Search Bar -->
+    <div class="content-wrapper d-flex flex-column align-items-center">
+        <!-- Image (MSSA Text) -->
+        <img src="~/images/cover-removebg.png" alt="Cover Image" style="max-width: 1700px; height: auto;" />
+        <!-- Search Form -->
+        <form asp-action="Search" asp-controller="Home" method="get" class="search-form w-50">
+            <div class="input-group">
+                <input type="text" name="query" class="form-control rounded-start" placeholder="Search delicious dishes..." aria-label="Search" value="@searchQuery" />
+                <button type="submit" class="btn btn-primary rounded-end">Search</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- Products Grid -->
+<div class="container" style="margin-top: -200px;">
+    <div class="row">
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var product in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <img src="@product.ImageUrl" alt="@product.Name" class="card-img-top product-image" />
+                        <div class="card-body">
+                            <h5 class="card-title">@product.Name</h5>
+                            <p class="card-text">@product.Description</p>
+                            <p class="card-text font-weight-bold">Price: $@product.Price</p>
+                            <a href="@Url.Action("Details", "Products", new { id = product.ProductId })" class="btn btn-primary">
+                                View Details
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else if (isSearchExecuted)
+        {
+            <div class="col-12 text-center">
+                <p>No products found matching your search.</p>
+            </div>
+        }
+    </div>
+</div>
+
+
+    <!-- Pagination Controls -->
+    @if (totalPages > 1)
+    {
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    <li class="page-item @(i == currentPage ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("Search", "Home", new { query = searchQuery, page = i })">@i</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+</div>

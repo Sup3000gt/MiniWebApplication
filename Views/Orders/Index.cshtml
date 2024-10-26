@@ -1,0 +1,29 @@
+﻿@model IEnumerable<MiniWebApplication.Models.Order>
+
+
+<h1 class="cart-title">Your Orders</h1>
+
+<table class="table table-hover" style="background-color: rgba(255, 255, 255, 0.3); border-radius: 15px; overflow: hidden;">
+    <thead style="background-color: rgba(0, 123, 255, 0.6); color: white;">
+        <tr>
+            <th>Order ID</th>
+            <th>Order Date</th>
+            <th>Total Amount</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr style="background-color: rgba(255, 255, 255, 0.1);">
+                <td>@order.OrderId</td>
+                <td>@order.OrderDate.ToString("g")</td>
+                <td>@order.TotalAmount.ToString("C")</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@order.OrderId" class="btn btn-info">View Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
