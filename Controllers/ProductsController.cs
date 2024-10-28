@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using MiniWebApplication.Data;
 using MiniWebApplication.Models;
 using MiniWebApplication.Services;
+using MiniWebApplication.ViewModels;
 
 namespace MiniWebApplication.Controllers
 {
@@ -40,31 +41,32 @@ namespace MiniWebApplication.Controllers
         }
 
         // GET: Products/Details/
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(int id, int page = 1, int pageSize = 5)
         {
-            // Fetch the product from the SQL database
             var product = await _context.Products.FindAsync(id);
             if (product == null) return NotFound();
 
-            // Retrieve reviews from Cosmos DB
-            List<Review> reviews;
-            try
+            var reviews = await _cosmosDbService.GetReviewsByProductIdAsync(id);
+            var paginatedReviews = reviews
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var totalPages = (int)Math.Ceiling((double)reviews.Count / pageSize);
+
+            var viewModel = new ProductDetailsViewModel
             {
-                reviews = await _cosmosDbService.GetReviewsByProductIdAsync(id);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error fetching reviews: {ex.Message}");
-                reviews = new List<Review>(); // Fallback to an empty list
-            }
+                Product = product,
+                Reviews = paginatedReviews,
+                AverageRating = reviews.Any() ? reviews.Average(r => r.Rating) : 0.0,
+                CurrentPage = page,
+                TotalPages = totalPages
+            };
 
-            // Calculate the average rating
-            var averageRating = reviews.Any() ? reviews.Average(r => r.Rating) : 0.0;
-
-
-            // Pass the view model to the view
-            return View(product);
+            return View(viewModel);
         }
+
+
 
         // GET: Products/Create
         [Authorize] // Allows any authenticated user

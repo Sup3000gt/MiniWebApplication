@@ -462,16 +462,98 @@ main {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Reviews Container */
+/* Reviews Container with Fixed Height and Width */
 .reviews-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     background-color: rgba(255, 255, 255, 0.8);
     border-radius: 15px;
     padding: 20px;
     margin-top: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 700px; /* Adjust as needed */
+    width: 100%; /* Changed from fixed to relative */
+    max-width: 1200px; /* Ensures it doesn't exceed parent */
     margin-left: auto;
     margin-right: auto;
+    overflow-y: auto;
+    box-sizing: border-box; /* Ensures padding is included in width */
+}
+
+
+    /* Review Item Styling */
+    .reviews-container .review-item {
+        margin-bottom: 10px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        padding-bottom: 5px;
+    }
+
+/* Pagination Container */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+    /* Pagination Button Styling */
+    .pagination a {
+        min-width: 50px; /* Fixed width for uniform size */
+        height: 40px; /* Height for consistency */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px; /* Rounded corners */
+        background-color: #fff;
+        color: #333;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 16px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease; /* Smooth transition */
+        border: 1px solid #ddd;
+        padding: 0 10px; /* Padding for spacing */
+    }
+
+        /* Active Button Styling */
+        .pagination a.active {
+            background-color: #6a11cb;
+            color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Stronger shadow for active button */
+            border: none;
+        }
+
+        /* Hover Effect */
+        .pagination a:hover {
+            background-color: #2575fc;
+            color: white;
+            transform: translateY(-2px); /* Slight hover lift effect */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15); /* Subtle shadow on hover */
+        }
+
+
+/* Centering the Review Form Container */
+.centered-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    min-height: 100vh; /* Full viewport height */
+    padding: 20px;
+    box-sizing: border-box; /* Include padding in size calculation */
+}
+
+/* Center and Resize the Submit Button */
+.submit-btn-container {
+    display: flex;
+    justify-content: center; /* Center the button horizontally */
+    margin-top: 20px; /* Add spacing above the button */
+}
+
+button.submit-btn {
+    width: auto; /* Regular size */
+    padding: 10px 20px; /* Adjust padding */
+    font-size: 16px;
+    border-radius: 25px; /* Optional rounded corners */
 }
 
 
@@ -510,13 +592,18 @@ main {
 
 /* Review Form Container */
 .review-form-container {
-    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Adds space between form elements */
     background-color: rgba(255, 255, 255, 0.8);
     border-radius: 15px;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-left: 10px;
+    width: 100%; /* Changed from fixed to relative */
+    max-width: 1200px; /* Ensures it doesn't exceed parent */
+    box-sizing: border-box; /* Ensures padding is included in width */
 }
+
 
 /* Top Section Layout */
 .top-section {
@@ -637,3 +724,28 @@ textarea {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px; /* Adds spacing below the image */
 }
+
+.star-rating {
+    direction: rtl;
+    display: inline-flex;
+    gap: 5px;
+}
+
+    .star-rating input {
+        display: none;
+    }
+
+    .star-rating label {
+        font-size: 30px;
+        color: #ccc;
+        cursor: pointer;
+    }
+
+    .star-rating input:checked ~ label {
+        color: #ffca08; /* Gold color for selected stars */
+    }
+
+    .star-rating input:hover ~ label,
+    .star-rating label:hover {
+        color: #ffca08; /* Hover effect */
+    }

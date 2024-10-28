@@ -29,17 +29,26 @@ public class ReviewsController : Controller
 
     // Get all reviews for a product and calculate average rating
     [HttpGet]
-    public async Task<IActionResult> GetReviews(int productId)
+    public async Task<IActionResult> GetReviews(int productId, int page = 1, int pageSize = 5)
     {
         var reviews = await _cosmosDbService.GetReviewsByProductIdAsync(productId);
-        var averageRating = reviews.Any() ? reviews.Average(r => r.Rating) : 0;
+        var paginatedReviews = reviews
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+        var totalPages = (int)Math.Ceiling((double)reviews.Count / pageSize);
 
         var viewModel = new ProductReviewsViewModel
         {
-            Reviews = reviews,
-            AverageRating = averageRating
+            Reviews = paginatedReviews,
+            AverageRating = reviews.Any() ? reviews.Average(r => r.Rating) : 0,
+            CurrentPage = page,
+            TotalPages = totalPages
         };
 
         return PartialView("_ReviewsList", viewModel);
     }
+
+
 }

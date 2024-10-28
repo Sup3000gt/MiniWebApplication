@@ -1,2 +1,19 @@
-﻿<!-- Views/Reviews/_ReviewsList.cshtml -->
+﻿@model List<MiniWebApplication.Models.Review>
 
+<h3>Reviews</h3>
+@if (Model.Any())
+{
+    foreach (var review in Model)
+    {
+        <div>
+            <strong>@review.UserName</strong> - Rated: @review.Rating / 5<br />
+            <p>@review.Comment</p>
+            <small>Posted on: @review.Timestamp.ToLocalTime()</small>
+        </div>
+        <hr />
+    }
+}
+else
+{
+    <p>No reviews yet. Be the first to review!</p>
+}

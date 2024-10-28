@@ -1,28 +1,151 @@
-﻿@model MiniWebApplication.Models.Product
+﻿@model MiniWebApplication.Models.ProductDetailsViewModel
 
 @{
     ViewData["Title"] = "Product Details";
 }
 
-<div class="container product-details">
+<!-- Embedded Styles -->
+<style>
+    /* General Styles for Reviews Titles */
+    .reviews-title {
+        text-align: left;
+        margin-bottom: 20px; /* Increased for better spacing */
+        color: #ffffff; /* White text */
+        font-size: 28px; /* Larger font size for emphasis */
+        font-weight: 700; /* Bold text */
+        position: relative;
+        padding-bottom: 10px; /* Space between text and underline */
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+        font-family: 'Helvetica Neue', Arial, sans-serif; /* Modern font */
+    }
+
+    /* Extended Underline for Reviews Titles */
+    .reviews-title::after {
+        content: '';
+        display: block;
+        width: 1160px; /* Increased length of the underline */
+        height: 4px; /* Thickness of the underline */
+        background-color: #ffffff; /* Color of the underline */
+        margin-top: 8px; /* Space above the underline */
+        border-radius: 2px; /* Rounded edges for a sleek look */
+    }
+
+    /* Responsive Font Size for Smaller Screens */
+    @@media (max-width: 600px) {
+        .reviews-title {
+            font-size: 6vw;
+        }
+
+        .reviews-title::after {
+            width: 80%; /* Adjust underline length on smaller screens */
+        }
+    }
+
+    /* Pagination Styles */
+    .pagination a {
+        margin-right: 5px;
+        text-decoration: none;
+        color: #333333; /* Dark text for better contrast on white background */
+        padding: 8px 12px; /* Increased padding for better clickability */
+        background-color: #ffffff; /* White background */
+        border: 1px solid #ccc; /* Light border for definition */
+        border-radius: 4px; /* Slightly more rounded corners */
+        transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        /* Simplified Active Page Styling */
+        .pagination a.active {
+            background-color: #ffc371; /* Set background to yellow */
+            border: 1px solid #ffc371; /* Thin yellow border */
+            font-weight: bold; /* Bold text */
+            text-decoration: underline; /* Underline text */
+            /* Removed box-shadow and transform for simplicity */
+            transition: border 0.3s ease;
+        }
+
+
+    /* Hover Effect with a Brighter Yellow Shade */
+    .pagination a:hover {
+        background-color: #ffd700; /* Brighter yellow background on hover */
+        color: #333333; /* Maintain dark text on hover */
+        border: 1px solid #ffd700; /* Match the border to the brighter background */
+    }
+
+
+        /* Focus Styles for Accessibility */
+        .pagination a:focus {
+            outline: 2px solid #333333; /* Dark outline for focus */
+            outline-offset: 2px;
+        }
+
+    /* Icon Styling (if using icons for active page) */
+    .active-icon {
+        margin-left: 5px;
+        font-size: 14px; /* Adjust size as needed */
+    }
+
+
+
+
+
+
+    /* Optional: Hover Effect for Enhanced Modern Look */
+    .reviews-title:hover {
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        transform: translateY(-2px);
+        transition: all 0.3s ease;
+    }
+
+    /* Additional Styles for the Container Wrapper */
+    .common-wrapper {
+        width: 100%;
+        max-width: 1200px;
+        margin: auto;
+        padding: 10px 20px;
+        box-sizing: border-box;
+    }
+
+    /* Remove default padding and margin for better alignment */
+    .reviews-section,
+    .review-form-wrapper {
+        padding: 10px 0;
+        box-sizing: border-box;
+        width: 100%;
+    }
+
+    /* Optional: Dark Background for Better Contrast */
+    body {
+        background-color: #333; /* Dark background for contrast */
+        padding: 20px;
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    /* Optional: Style for Pagination Active Link Text */
+    .pagination a.active {
+        color: #333333; /* Dark text for better readability on yellow background */
+    }
+</style>
+
+<div class="container product-details mt-5">
     <div class="row align-items-center">
         <!-- Product Image Section -->
         <div class="col-md-6">
-            <img src="@Url.Content(Model.ImageUrl)" alt="@Model.Name" class="img-fluid rounded product-image" />
+            <img src="@Url.Content(Model.Product.ImageUrl)" alt="@Model.Product.Name"
+                 class="img-fluid rounded product-image" />
         </div>
 
         <!-- Product Information Section -->
         <div class="col-md-6">
-            <div class="info-box p-4">
-                <h1 class="product-title">@Model.Name</h1>
-                <p class="product-description">@Model.Description</p>
-                <p class="product-price">Price: <strong>@Model.Price.ToString("C")</strong></p>
+            <div class="info-box p-4 shadow-sm">
+                <h1 class="product-title">@Model.Product.Name</h1>
+                <p class="product-description">@Model.Product.Description</p>
+                <p class="product-price">Price: <strong>@Model.Product.Price.ToString("C")</strong></p>
+                <p class="product-rating">Average Rating: <strong>@Model.AverageRating / 5</strong></p>
 
                 @if (User.Identity.IsAuthenticated)
                 {
                     <form asp-controller="ShoppingCart" asp-action="AddToCart" method="post">
-                        <input type="hidden" name="productId" value="@Model.ProductId" />
-
+                        <input type="hidden" name="productId" value="@Model.Product.ProductId" />
                         <div class="form-group">
                             <label for="quantity" class="quantity-label">Quantity:</label>
                             <select name="quantity" id="quantity" class="form-control quantity-select">
@@ -32,7 +155,6 @@
                                 }
                             </select>
                         </div>
-
                         <button type="submit" class="btn btn-warning mt-3">
                             <i class="fas fa-cart-plus"></i> Add to Cart
                         </button>
@@ -50,5 +172,106 @@
                 </a>
             </div>
         </div>
+    </div>
+
+    <!-- Common Wrapper for Alignment -->
+    <div class="common-wrapper">
+
+        <!-- Customer Reviews Section -->
+        <div class="reviews-section mt-4">
+            <h3 class="reviews-title">
+                Customer Reviews
+            </h3>
+
+            <div class="reviews-container"
+                 style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
+                @if (Model.Reviews == null || !Model.Reviews.Any())
+                {
+                    <p>No reviews yet. Be the first to share your experience!</p>
+                }
+                else
+                {
+                    @foreach (var review in Model.Reviews)
+                    {
+                        <div class="review-item"
+                             style="display: flex; justify-content: space-between;
+                            align-items: flex-start; width: 100%;
+                            border-bottom: 1px solid rgba(0, 0, 0, 0.1); padding: 10px 0;">
+                            <div style="flex: 1;">
+                                <strong>@review.UserName</strong>
+                                <p style="margin: 5px 0;">@review.Comment</p>
+                                <small style="color: gray;">Posted on: @review.Timestamp.ToLocalTime()</small>
+                            </div>
+                            <span>Rated: @review.Rating / 5</span>
+                        </div>
+                    }
+                }
+            </div>
+
+            <!-- Pagination Controls -->
+            @if (Model.TotalPages > 1)
+            {
+                <div class="pagination"
+                     style="display: flex; justify-content: flex-start; margin-top: 10px;">
+                    @for (int i = 1; i <= Model.TotalPages; i++)
+                    {
+                        <a asp-action="Details"
+                           asp-route-id="@Model.Product.ProductId"
+                           asp-route-page="@i"
+                           class="@(Model.CurrentPage == i ? "active" : "")">
+                            @i
+                        </a>
+                    }
+                </div>
+            }
+        </div>
+
+        <!-- Leave a Review Section -->
+        <div class="review-form-wrapper mt-4">
+            <h3 class="reviews-title">
+                Leave a Review
+            </h3>
+
+            <form asp-controller="Reviews" asp-action="AddReview" method="post"
+                  class="review-form-container"
+                  style="display: flex; flex-direction: column; align-items: flex-start; gap: 10px; width: 100%;">
+                <input type="hidden" name="ProductId" value="@Model.Product.ProductId" />
+
+                <div class="form-group" style="width: 100%; text-align: left;">
+                    <label for="UserName">Name:</label>
+                    <input type="text" id="UserName" name="UserName" class="form-control"
+                           style="width: 100%; max-width: 300px; box-sizing: border-box;" required />
+                </div>
+
+                <div class="form-group" style="width: 100%; text-align: left;">
+                    <label for="Rating">Rating:</label>
+                    <div class="star-rating" style="display: inline-flex; gap: 5px;">
+                        <input type="radio" id="star5" name="Rating" value="5" required />
+                        <label for="star5" title="5 stars">★</label>
+                        <input type="radio" id="star4" name="Rating" value="4" />
+                        <label for="star4" title="4 stars">★</label>
+                        <input type="radio" id="star3" name="Rating" value="3" />
+                        <label for="star3" title="3 stars">★</label>
+                        <input type="radio" id="star2" name="Rating" value="2" />
+                        <label for="star2" title="2 stars">★</label>
+                        <input type="radio" id="star1" name="Rating" value="1" />
+                        <label for="star1" title="1 star">★</label>
+                    </div>
+                </div>
+
+                <div class="form-group" style="width: 100%; text-align: left;">
+                    <label for="Comment">Comment:</label>
+                    <textarea id="Comment" name="Comment" class="form-control"
+                              style="width: 100%; resize: none; box-sizing: border-box;" maxlength="500" required></textarea>
+                </div>
+
+                <div class="submit-btn-container" style="align-self: flex-start; margin-top: 10px;">
+                    <button type="submit" class="btn btn-success submit-btn">
+                        <i class="fas fa-paper-plane"></i> Submit Review
+                    </button>
+                </div>
+            </form>
+        </div>
+
     </div>
 </div>
