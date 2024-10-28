@@ -53,15 +53,15 @@
         transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-        /* Simplified Active Page Styling */
+    /* Simplified Active Page Styling */
         .pagination a.active {
-            background-color: #ffc371; /* Set background to yellow */
-            border: 1px solid #ffc371; /* Thin yellow border */
+            background-color: #007bff; /* Set background to Bootstrap's primary blue */
+            border: 1px solid #007bff; /* Matching blue border */
             font-weight: bold; /* Bold text */
             text-decoration: underline; /* Underline text */
-            /* Removed box-shadow and transform for simplicity */
             transition: border 0.3s ease;
         }
+
 
 
     /* Hover Effect with a Brighter Yellow Shade */
@@ -72,11 +72,11 @@
     }
 
 
-        /* Focus Styles for Accessibility */
-        .pagination a:focus {
-            outline: 2px solid #333333; /* Dark outline for focus */
-            outline-offset: 2px;
-        }
+    /* Focus Styles for Accessibility */
+    .pagination a:focus {
+        outline: 2px solid #333333; /* Dark outline for focus */
+        outline-offset: 2px;
+    }
 
     /* Icon Styling (if using icons for active page) */
     .active-icon {
@@ -84,12 +84,7 @@
         font-size: 14px; /* Adjust size as needed */
     }
 
-
-
-
-
-
-    /* Optional: Hover Effect for Enhanced Modern Look */
+    /* Hover Effect for Enhanced Modern Look */
     .reviews-title:hover {
         text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
         transform: translateY(-2px);
@@ -120,7 +115,7 @@
         font-family: 'Helvetica Neue', Arial, sans-serif;
     }
 
-    /* Optional: Style for Pagination Active Link Text */
+    /* Style for Pagination Active Link Text */
     .pagination a.active {
         color: #333333; /* Dark text for better readability on yellow background */
     }
