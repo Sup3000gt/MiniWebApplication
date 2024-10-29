@@ -8,10 +8,12 @@ using System.Threading.Tasks;
 public class ReviewsController : Controller
 {
     private readonly CosmosDbService _cosmosDbService;
+    private readonly ILogger<ReviewsController> _logger;
 
-    public ReviewsController(CosmosDbService cosmosDbService)
+    public ReviewsController(CosmosDbService cosmosDbService, ILogger<ReviewsController> logger)
     {
         _cosmosDbService = cosmosDbService;
+        _logger = logger;
     }
 
     // Add a new review
@@ -32,17 +34,25 @@ public class ReviewsController : Controller
     public async Task<IActionResult> GetReviews(int productId, int page = 1, int pageSize = 5)
     {
         var reviews = await _cosmosDbService.GetReviewsByProductIdAsync(productId);
-        var paginatedReviews = reviews
-            .Skip((page - 1) * pageSize)
+
+        var orderedReviews = reviews.OrderByDescending(r => r.Timestamp).ToList();
+
+        _logger.LogInformation("ReviewsController loaded successfully");
+        _logger.LogInformation($"First review: {orderedReviews.FirstOrDefault()?.Timestamp}");
+
+        // Reverse page logic: Start from newest first.
+        var totalPages = (int)Math.Ceiling((double)orderedReviews.Count / pageSize);
+        var reversedPage = totalPages - page + 1; // Adjust page index to start from end.
+
+        var paginatedReviews = orderedReviews
+            .Skip((reversedPage - 1) * pageSize)
             .Take(pageSize)
             .ToList();
-
-        var totalPages = (int)Math.Ceiling((double)reviews.Count / pageSize);
 
         var viewModel = new ProductReviewsViewModel
         {
             Reviews = paginatedReviews,
-            AverageRating = reviews.Any() ? reviews.Average(r => r.Rating) : 0,
+            AverageRating = orderedReviews.Any() ? orderedReviews.Average(r => r.Rating) : 0,
             CurrentPage = page,
             TotalPages = totalPages
         };

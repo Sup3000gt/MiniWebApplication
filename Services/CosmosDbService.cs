@@ -24,8 +24,9 @@ namespace MiniWebApplication.Services
 
         public async Task<List<Review>> GetReviewsByProductIdAsync(int productId)
         {
-            var query = new QueryDefinition("SELECT * FROM c WHERE c.ProductId = @productId")
-                            .WithParameter("@productId", productId);
+            var query = new QueryDefinition(
+                "SELECT * FROM c WHERE c.ProductId = @productId ORDER BY c.Timestamp DESC")
+                .WithParameter("@productId", productId);
 
             var iterator = _container.GetItemQueryIterator<Review>(query, requestOptions: new QueryRequestOptions
             {

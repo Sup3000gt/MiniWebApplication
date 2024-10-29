@@ -35,6 +35,7 @@ namespace MiniWebApplication
             ));
 
             // Add services to the container.
+            builder.Services.AddLogging();
             builder.Services.AddControllersWithViews();
             builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             builder.Services.AddScoped<RazorViewToStringRenderer>();
@@ -81,6 +82,14 @@ namespace MiniWebApplication
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.Use(async (context, next) =>
+            {
+                var logger = context.RequestServices.GetService<ILogger<Program>>();
+                logger.LogInformation("Middleware executed for path: {Path}", context.Request.Path);
+                await next();
+            });
+
 
             app.UseAuthentication();
             app.UseAuthorization();
