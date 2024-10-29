@@ -64,7 +64,7 @@ namespace MiniWebApplication.Services
                 requestOptions: new QueryRequestOptions
                 {
                     PartitionKey = new PartitionKey(productId),
-                    MaxItemCount = 20  
+                    MaxItemCount = 20
                 });
 
             var stopwatch = Stopwatch.StartNew();
