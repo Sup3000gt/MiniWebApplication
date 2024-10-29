@@ -4,8 +4,21 @@
     ViewData["Title"] = "Product Details";
 }
 
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
 <!-- Embedded Styles -->
 <style>
+        /* Star Styles */
+    .stars i {
+        font-size: 24px; /* Adjust size if needed */
+        color: #DAA520; /* Darker shade of yellow (Goldenrod) */
+        margin-right: 2px;
+    }
     /* General Styles for Reviews Titles */
     .reviews-title {
         text-align: left;
@@ -54,6 +67,7 @@
     }
 
     /* Simplified Active Page Styling */
+
         .pagination a.active {
             background-color: #007bff; /* Set background to Bootstrap's primary blue */
             border: 1px solid #007bff; /* Matching blue border */
@@ -120,7 +134,7 @@
         color: #333333; /* Dark text for better readability on yellow background */
     }
 </style>
-
+<body>
 <div class="container product-details mt-5">
     <div class="row align-items-center">
         <!-- Product Image Section -->
@@ -135,7 +149,27 @@
                 <h1 class="product-title">@Model.Product.Name</h1>
                 <p class="product-description">@Model.Product.Description</p>
                 <p class="product-price">Price: <strong>@Model.Product.Price.ToString("C")</strong></p>
-                <p class="product-rating">Average Rating: <strong>@Model.AverageRating / 5</strong></p>
+                    <p class="product-rating">
+                        Average Rating:
+                        <span class="stars">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                if (i <= Math.Floor(Model.AverageRating))
+                                {
+                                    <i class="fas fa-star"></i> <!-- Full star -->
+                                }
+                                else if (i == Math.Ceiling(Model.AverageRating) && Model.AverageRating % 1 >= 0.5)
+                                {
+                                    <i class="fas fa-star-half-alt"></i> <!-- Half star -->
+                                }
+                                else
+                                {
+                                    <i class="far fa-star"></i> <!-- Empty star -->
+                                }
+                            }
+                        </span>
+                    </p>
+
 
                 @if (User.Identity.IsAuthenticated)
                 {
@@ -169,6 +203,9 @@
         </div>
     </div>
 
+
+    @if (User.Identity.IsAuthenticated)
+{
     <!-- Common Wrapper for Alignment -->
     <div class="common-wrapper">
 
@@ -197,7 +234,25 @@
                                 <p style="margin: 5px 0;">@review.Comment</p>
                                 <small style="color: gray;">Posted on: @review.Timestamp.ToLocalTime()</small>
                             </div>
-                            <span>Rated: @review.Rating / 5</span>
+                                <span class="stars">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        if (i <= Math.Floor((double)review.Rating))
+                                        {
+                                            <i class="fas fa-star"></i> <!-- Full star -->
+                                        }
+                                        else if (i == Math.Ceiling((double)review.Rating) && review.Rating % 1 >= 0.5)
+                                        {
+                                            <i class="fas fa-star-half-alt"></i> <!-- Half star -->
+                                        }
+                                        else
+                                        {
+                                            <i class="far fa-star"></i> <!-- Empty star -->
+                                        }
+
+                                    }
+                                </span>
+
                         </div>
                     }
                 }
@@ -238,21 +293,36 @@
                            style="width: 100%; max-width: 300px; box-sizing: border-box;" required />
                 </div>
 
-                <div class="form-group" style="width: 100%; text-align: left;">
-                    <label for="Rating">Rating:</label>
-                    <div class="star-rating" style="display: inline-flex; gap: 5px;">
-                        <input type="radio" id="star5" name="Rating" value="5" required />
-                        <label for="star5" title="5 stars">★</label>
-                        <input type="radio" id="star4" name="Rating" value="4" />
-                        <label for="star4" title="4 stars">★</label>
-                        <input type="radio" id="star3" name="Rating" value="3" />
-                        <label for="star3" title="3 stars">★</label>
-                        <input type="radio" id="star2" name="Rating" value="2" />
-                        <label for="star2" title="2 stars">★</label>
-                        <input type="radio" id="star1" name="Rating" value="1" />
-                        <label for="star1" title="1 star">★</label>
+                    <div class="form-group" style="width: 100%; text-align: left;">
+                        <label for="Rating">Rating:</label>
+                        <div class="star-rating" style="display: inline-flex; gap: 5px;">
+                            <input type="radio" id="star5" name="Rating" value="5" required />
+                            <label for="star5" title="5 stars">
+                                <i class="fas fa-star"></i>
+                            </label>
+
+                            <input type="radio" id="star4" name="Rating" value="4" />
+                            <label for="star4" title="4 stars">
+                                <i class="fas fa-star"></i>
+                            </label>
+
+                            <input type="radio" id="star3" name="Rating" value="3" />
+                            <label for="star3" title="3 stars">
+                                <i class="fas fa-star"></i>
+                            </label>
+
+                            <input type="radio" id="star2" name="Rating" value="2" />
+                            <label for="star2" title="2 stars">
+                                <i class="fas fa-star"></i>
+                            </label>
+
+                            <input type="radio" id="star1" name="Rating" value="1" />
+                            <label for="star1" title="1 star">
+                                <i class="fas fa-star"></i>
+                            </label>
+                        </div>
                     </div>
-                </div>
+
 
                 <div class="form-group" style="width: 100%; text-align: left;">
                     <label for="Comment">Comment:</label>
@@ -269,4 +339,7 @@
         </div>
 
     </div>
-</div>
+        }
+
+    </body>
+</html>
