@@ -8,6 +8,8 @@ using MiniWebApplication.Data;
 using MiniWebApplication.Models;
 using MiniWebApplication.Services;
 using MiniWebApplication.ViewModels;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 
 namespace MiniWebApplication.Controllers
 {
@@ -16,13 +18,15 @@ namespace MiniWebApplication.Controllers
         // Injected services
         private readonly ApplicationDbContext _context;
         private readonly CosmosDbService _cosmosDbService;
+        private readonly IConfiguration _configuration;
         private const int PageSize = 9;
 
         // Constructor with dependency injection
-        public ProductsController(ApplicationDbContext context, CosmosDbService cosmosDbService)
+        public ProductsController(ApplicationDbContext context, CosmosDbService cosmosDbService, IConfiguration configuration)
         {
             _context = context;
             _cosmosDbService = cosmosDbService;
+            _configuration = configuration;
         }
 
         // GET: Products
@@ -78,16 +82,68 @@ namespace MiniWebApplication.Controllers
         // POST: Products/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize] // Allows any authenticated user to post
-        public async Task<IActionResult> Create([Bind("Name,Description,Price,ImageUrl")] Product product)
+        [Authorize]
+        public async Task<IActionResult> Create(Product product)
         {
-            if (ModelState.IsValid)
+            try
             {
+                // Ensure an image file is uploaded
+                if (product.ImageFile == null || product.ImageFile.Length == 0)
+                {
+                    ModelState.AddModelError(string.Empty, "Please upload an image.");
+                    return View(product); // Return the form with error message
+                }
+
+                // Upload image to Blob Storage
+                string containerName = "alanminiprojectimage";
+                string blobUrl = await UploadImageToBlob(product.ImageFile, containerName);
+                product.ImageUrl = blobUrl;
+
+                // Save product to the database
                 _context.Add(product);
                 await _context.SaveChangesAsync();
+
+                // Redirect to Index only once
                 return RedirectToAction(nameof(Index));
             }
-            return View(product);
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                ModelState.AddModelError(string.Empty, "An error occurred. Please try again.");
+                return View(product); // Ensure no further response is attempted
+            }
+        }
+
+        // Blob Upload Helper Method
+        private async Task<string> UploadImageToBlob(IFormFile file, string containerName)
+        {
+            try
+            {
+                Console.WriteLine("Connecting to Blob Storage...");
+
+                string blobConnectionString = _configuration.GetConnectionString("AzureBlobStorage");
+                BlobServiceClient blobServiceClient = new BlobServiceClient(blobConnectionString);
+                BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+
+                await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
+                string blobName = Guid.NewGuid() + Path.GetExtension(file.FileName);
+                BlobClient blobClient = containerClient.GetBlobClient(blobName);
+
+                Console.WriteLine($"Uploading file: {blobName}");
+
+                using (var stream = file.OpenReadStream())
+                {
+                    await blobClient.UploadAsync(stream, true);
+                }
+
+                Console.WriteLine("File uploaded successfully.");
+                return blobClient.Uri.ToString();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Upload failed: {ex.Message}");
+                throw; // Rethrow the exception to be handled by the controller
+            }
         }
     }
 }

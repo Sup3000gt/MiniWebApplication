@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MiniWebApplication.Models
 {
@@ -18,8 +20,9 @@ namespace MiniWebApplication.Models
         [Range(0.01, 10000.00, ErrorMessage = "Price must be between $0.01 and $10,000.")]
         public decimal Price { get; set; }
 
-        [Required(ErrorMessage = "Image URL is required.")]
-        [Url(ErrorMessage = "Please enter a valid URL.")]
-        public string ImageUrl { get; set; }
+        public string ImageUrl { get; set; } // Internal use only
+
+        [NotMapped] // This ensures the field is not mapped to the database
+        public IFormFile ImageFile { get; set; } // For file upload
     }
 }

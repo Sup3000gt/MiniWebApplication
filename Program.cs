@@ -132,12 +132,22 @@ namespace MiniWebApplication
             app.UseRouting();
 
             // Custom middleware for logging request paths
+            // Custom middleware for logging request paths
             app.Use(async (context, next) =>
             {
                 var logger = context.RequestServices.GetService<ILogger<Program>>();
+
+                // Log the incoming request path
                 logger.LogInformation("Middleware executed for path: {Path}", context.Request.Path);
-                await next();
+                Console.WriteLine($"Request: {context.Request.Path}");
+
+                // Call the next middleware in the pipeline
+                await next.Invoke();
+
+                // Log the response status code after the request is processed
+                Console.WriteLine($"Response: {context.Response.StatusCode}");
             });
+
 
             app.UseAuthentication();
             app.UseAuthorization();

@@ -7,13 +7,9 @@
 
 <h1 class="cart-title">Add New Product</h1>
 
-
-
-
 <div class="container mt-5 d-flex justify-content-center">
     <div class="card p-4 shadow-lg" style="width: 500px; background-color: rgba(255, 255, 255, 0.5); border-radius: 15px;">
-
-        <form asp-action="Create" method="post">
+        <form asp-action="Create" method="post" enctype="multipart/form-data" onsubmit="return preventMultipleSubmissions()">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group mb-3">
@@ -34,21 +30,29 @@
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
 
+            <!-- Image Upload Section -->
             <div class="form-group mb-3">
-                <label asp-for="ImageUrl" class="control-label">Image URL</label>
-                <input asp-for="ImageUrl" class="form-control rounded" placeholder="Enter product image URL" />
-                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                <label class="control-label">Upload Image</label>
+                <input type="file" name="ImageFile" class="form-control rounded" id="ImageFileInput" required />
             </div>
 
             <div class="d-flex justify-content-between mt-4">
-                <button type="submit" class="btn btn-success btn-block px-4">Add Product</button>
+                <button type="submit" class="btn btn-success btn-block px-4" id="submitButton">Add Product</button>
                 <a asp-action="Index" class="btn btn-secondary btn-block px-4">Back to Products</a>
             </div>
         </form>
     </div>
+</div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <script>
+        function preventMultipleSubmissions() {
+            const submitButton = document.getElementById('submitButton');
+            submitButton.disabled = true; // Disable the button after first click
+            submitButton.innerText = "Submitting..."; // Optional: Provide feedback to user
+            return true; // Allow the form to be submitted
+        }
+    </script>
+
+    @await Html.PartialAsync("_ValidationScriptsPartial")
 }
