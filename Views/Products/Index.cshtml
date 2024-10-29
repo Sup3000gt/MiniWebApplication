@@ -10,7 +10,10 @@
 @* Add New Product Button *@
 @if (User.Identity.IsAuthenticated)
 {
-    <a asp-action="Create" class="btn btn-success mb-3">Add New Product</a>
+    <a asp-action="Create" class="btn btn-success mb-3">
+        <i class="fas fa-plus"></i> Add New Product
+    </a>
+
 }
 
 <div class="row">
@@ -24,7 +27,7 @@
                     <p class="card-text">@product.Description</p>
                     <p class="card-text">Price: @product.Price.ToString("C")</p>
                     <div class="mt-auto">
-                        <a asp-action="Details" asp-route-id="@product.ProductId" class="btn btn-primary">View Details</a>
+                        <a asp-action="Details" asp-route-id="@product.ProductId" class="btn btn-primary"> <i class="fas fa-info-circle"></i> View Details</a>
                     </div>
                 </div>
             </div>

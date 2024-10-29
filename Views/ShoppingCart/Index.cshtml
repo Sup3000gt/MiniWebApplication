@@ -29,7 +29,10 @@
                         <input type="hidden" name="productId" value="@item.ProductId" />
                         <input type="number" name="quantity" value="@item.Quantity" min="1"
                                class="form-control quantity-input" />
-                        <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            <i class="fas fa-sync-alt"></i> Update
+                        </button>
+
                     </form>
                 </td>
                 <td>@(item.Product.Price.ToString("C", usdCulture))</td>
@@ -37,7 +40,10 @@
                 <td>
                     <form asp-action="RemoveFromCart" method="post" class="d-inline">
                         <input type="hidden" name="productId" value="@item.ProductId" />
-                        <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash"></i> Remove
+                        </button>
+
                     </form>
                 </td>
             </tr>
@@ -48,8 +54,14 @@
 <p class="total-price">Total: <strong>@total.ToString("C", usdCulture)</strong></p>
 
 <div class="button-group mt-4">
-    <a href="@Url.Action("Index", "Products")" class="btn btn-primary me-3">Continue Shopping</a>
+    <a href="@Url.Action("Index", "Products")" class="btn btn-primary me-3">
+        <i class="fas fa-shopping-bag"></i> Continue Shopping
+    </a>
+
     <form asp-action="PlaceOrder" method="post" class="d-inline">
-        <button type="submit" class="btn btn-success">Place Order</button>
+        <button type="submit" class="btn btn-success">
+            <i class="fas fa-check-circle"></i> Place Order
+        </button>
+
     </form>
 </div>

@@ -22,7 +22,7 @@
             <div class="input-group" style="display: flex; align-items: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 50px; overflow: hidden; background: white; padding: 0; margin: 0;">
                 <input type="text" name="query" class="form-control rounded-start" placeholder="Search delicious dishes..." aria-label="Search" value="@searchQuery" style="border: none; height: 50px; padding: 0 20px; flex: 1; background: transparent; outline: none; box-sizing: border-box; margin: 0; font-size: 16px; vertical-align: middle;" />
                 <button type="submit" class="btn btn-primary rounded-end" style="height: 50px; padding: 0 25px; background: #007bff; color: white; border: none; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer; box-sizing: border-box;">
-                    Search
+                    <i class="fas fa-search"></i> Search
                 </button>
             </div>
         </form>
@@ -37,18 +37,23 @@
             @foreach (var product in Model)
             {
                 <div class="col-md-4 mb-4">
-                    <div class="card h-100">
+                    <div class="card h-100 d-flex flex-column">
                         <img src="@product.ImageUrl" alt="@product.Name" class="card-img-top product-image" />
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title">@product.Name</h5>
                             <p class="card-text">@product.Description</p>
                             <p class="card-text font-weight-bold">Price: $@product.Price</p>
-                            <a href="@Url.Action("Details", "Products", new { id = product.ProductId })"
-                               class="btn btn-primary btn-sm mt-auto"
-                               style="width: 130px;">
-                                View Details
-                            </a>
 
+                            <!-- Button Container to Align Buttons -->
+                            <div class="mt-auto">
+                                <a href="@Url.Action("Details", "Products", new { id = product.ProductId })"
+                                   class="btn btn-primary btn-sm d-flex align-items-center justify-content-start"
+                                   style="width: 180px; height: 40px;">
+                                    <i class="fas fa-info-circle me-2"></i> View Details
+                                </a>
+
+
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -62,6 +67,7 @@
         }
     </div>
 </div>
+
 
 <!-- Pagination Controls -->
 @if (totalPages > 1)

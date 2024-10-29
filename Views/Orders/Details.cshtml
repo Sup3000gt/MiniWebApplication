@@ -1,5 +1,10 @@
 ﻿@model MiniWebApplication.Models.Order
 
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
 <h1 class="cart-title">Order Details</h1>
 
 <p><strong>Order ID:</strong> @Model.OrderId</p>
@@ -28,4 +33,7 @@
     </tbody>
 </table>
 
-<a href="@Url.Action("Index", "Orders")" class="btn btn-secondary">Back to Orders</a>
+<a href="@Url.Action("Index", "Orders")" class="btn btn-secondary d-flex align-items-center">
+    <i class="fas fa-arrow-left me-2"></i> Back to Orders
+</a>
+

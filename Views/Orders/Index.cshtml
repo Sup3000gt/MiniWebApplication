@@ -1,5 +1,9 @@
 ﻿@model IEnumerable<MiniWebApplication.Models.Order>
 
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
 
 <h1 class="cart-title">Your Orders</h1>
 
@@ -20,7 +24,10 @@
                 <td>@order.OrderDate.ToString("g")</td>
                 <td>@order.TotalAmount.ToString("C")</td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@order.OrderId" class="btn btn-info">View Details</a>
+                    <a asp-action="Details" asp-route-id="@order.OrderId" class="btn btn-info">
+                        <i class="fas fa-file-alt"></i> View Details
+                    </a>
+
                 </td>
             </tr>
         }
