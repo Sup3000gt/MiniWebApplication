@@ -46,6 +46,12 @@ namespace MiniWebApplication.Controllers
                     .Include(c => c.Product)
                     .ToList();
 
+                // Check if there is a success message in TempData
+                if (TempData["Success"] != null)
+                {
+                    ViewBag.SuccessMessage = TempData["Success"].ToString();
+                }
+
                 return View(cartItems);
             }
             catch (InvalidOperationException)
@@ -53,6 +59,7 @@ namespace MiniWebApplication.Controllers
                 return RedirectToAction("Login", "Account");
             }
         }
+
 
         // POST: ShoppingCart/AddToCart/5
         [HttpPost]
@@ -127,7 +134,6 @@ namespace MiniWebApplication.Controllers
         }
 
         // POST: ShoppingCart/PlaceOrder
-        // POST: ShoppingCart/PlaceOrder
         [HttpPost]
         public async Task<IActionResult> PlaceOrder()
         {
@@ -177,7 +183,9 @@ namespace MiniWebApplication.Controllers
             await _context.SaveChangesAsync();
 
             TempData["Success"] = "Order placed successfully!";
-            return RedirectToAction("Index", "Orders");
+
+            // Stay on the Shopping Cart page
+            return RedirectToAction("Index", "ShoppingCart");
         }
 
     }
