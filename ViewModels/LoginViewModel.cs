@@ -10,5 +10,12 @@ namespace MiniWebApplication.ViewModels
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
+        // Constructor to initialize properties
+        public LoginViewModel()
+        {
+            Username = string.Empty;
+            Password = string.Empty;
+        }
     }
 }

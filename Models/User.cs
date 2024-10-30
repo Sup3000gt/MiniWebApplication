@@ -22,14 +22,17 @@ namespace MiniWebApplication.Models
         [EmailAddress]
         public string Email { get; set; }
 
+        [Required]
         [Display(Name = "First Name")]
         [StringLength(50)]
         public string FirstName { get; set; }
 
+        [Required]
         [Display(Name = "Last Name")]
         [StringLength(50)]
         public string LastName { get; set; }
 
+        [Required]
         [Display(Name = "Phone Number")]
         [Phone]
         public string PhoneNumber { get; set; }
@@ -47,6 +50,18 @@ namespace MiniWebApplication.Models
 
         // EmailConfirmationTokenExpires property
         public DateTime EmailConfirmationTokenExpires { get; set; }
+
+        // Constructor to initialize properties
+        public User()
+        {
+            Username = string.Empty;
+            Password = string.Empty;
+            Email = string.Empty;
+            FirstName = string.Empty;
+            LastName = string.Empty;
+            PhoneNumber = string.Empty;
+            // DateOfBirth can remain null if appropriate
+        }
 
     }
 }

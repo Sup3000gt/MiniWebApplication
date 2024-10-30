@@ -13,6 +13,7 @@ namespace MiniWebApplication.Models
         public int ProductId { get; set; }
 
         [JsonProperty("UserName")]
+        [Required(ErrorMessage = "Username is required.")]
         public string UserName { get; set; }
 
         [Required(ErrorMessage = "Rating is required.")]
@@ -27,5 +28,13 @@ namespace MiniWebApplication.Models
 
         [JsonProperty("Timestamp")]
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+
+        // Constructor to initialize properties
+        public Review()
+        {
+            UserName = string.Empty;
+            Comment = string.Empty;
+            Timestamp = DateTime.UtcNow; 
+        }
     }
 }
