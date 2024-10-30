@@ -38,7 +38,7 @@
                         <li class="nav-item">
                             <a class="nav-link active" href="@Url.Action("Index", "Products")">Products</a>
                         </li>
-                        @if (User.Identity.IsAuthenticated)
+                        @if (User.Identity?.IsAuthenticated == true)
                         {
                             <li class="nav-item">
                                 <a class="nav-link" href="@Url.Action("Index", "Orders")">My Orders</a>

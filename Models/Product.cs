@@ -24,7 +24,8 @@ namespace MiniWebApplication.Models
 
         [NotMapped] // This ensures the field is not mapped to the database
         public IFormFile ImageFile { get; set; } // For file upload
-                                                 // Constructor to initialize properties
+
+        // Constructor to initialize properties
         public Product()
         {
             Name = string.Empty;
