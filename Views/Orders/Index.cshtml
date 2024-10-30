@@ -2,7 +2,29 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    int pageSize = 5; // Number of orders per page
+    int totalOrders = Model.Count(); // Total number of orders
+    int totalPages = (int)Math.Ceiling((double)totalOrders / pageSize);
+
+    // Get the current page from query string or default to 1
+    int currentPage = Context.Request.Query["page"].FirstOrDefault() != null ? int.Parse(Context.Request.Query["page"]) : 1;
+
+    // Ensure currentPage is within valid range
+    if (currentPage < 1)
+    {
+        currentPage = 1;
+    }
+    else if (currentPage > totalPages)
+    {
+        currentPage = totalPages;
+    }
+
+    // Calculate the range of orders to display
+    int skip = (currentPage - 1) * pageSize;
+    var ordersToDisplay = Model.Skip(skip).Take(pageSize).ToList();
 }
+
 
 
 <h1 class="cart-title">Your Orders</h1>
@@ -17,7 +39,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var order in Model)
+        @foreach (var order in ordersToDisplay)
         {
             <tr style="background-color: rgba(255, 255, 255, 0.1);">
                 <td>@order.OrderId</td>
@@ -27,10 +49,69 @@
                     <a asp-action="Details" asp-route-id="@order.OrderId" class="btn btn-info">
                         <i class="fas fa-file-alt"></i> View Details
                     </a>
-
                 </td>
             </tr>
         }
     </tbody>
 </table>
 
+@if (totalPages > 1)
+{
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            @for (int i = 1; i <= totalPages; i++)
+            {
+                if (i == currentPage)
+                {
+                    <li class="page-item active">
+                        <a class="page-link" href="#">@i</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="?page=@i">@i</a>
+                    </li>
+                }
+            }
+        </ul>
+    </nav>
+}
+<style>
+    .pagination {
+        justify-content: center;
+        margin-top: 20px; /* Add space above the pagination controls */
+    }
+
+        .pagination .page-item {
+            margin: 0 2px;
+        }
+
+    .page-link {
+        color: #007bff;
+        border: 1px solid #dee2e6;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.25rem;
+        background-color: #fff;
+        text-decoration: none;
+    }
+
+        .page-link:hover {
+            color: #0056b3;
+            background-color: #e9ecef;
+            text-decoration: none;
+        }
+
+    .page-item.active .page-link {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: white;
+        pointer-events: none; /* Disable click on active page */
+    }
+
+        .page-item.active .page-link:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+</style>
