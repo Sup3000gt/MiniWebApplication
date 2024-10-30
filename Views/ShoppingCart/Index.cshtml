@@ -7,52 +7,43 @@
     decimal total = Model.Sum(item => item.Quantity * item.Product.Price);
     var usdCulture = new CultureInfo("en-US");
     bool isCartEmpty = !Model.Any();  // Check if the cart is empty
+    int counter = 1; // Initialize the counter
 }
 
 <h1 class="cart-title">Shopping Cart</h1>
 
-<!-- Bootstrap alert for success message -->
-@if (TempData["Success"] != null)
-{
-    <div id="success-alert" class="alert alert-success alert-dismissible fade show" role="alert">
-        @TempData["Success"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-}
-
 <script>
-    // Fade-out effect for the success message
-    setTimeout(function () {
+    document.addEventListener('DOMContentLoaded', function () {
         var alert = document.getElementById('success-alert');
         if (alert) {
-            alert.style.transition = "opacity 2s";  // Smooth fade-out over 2 seconds
-            alert.style.opacity = "0";  // Start fading out
             setTimeout(function () {
-                alert.remove();  // Remove the element after fade-out
-            }, 2000);  // Match the duration of the transition
+                alert.classList.add('hidden'); // Add the 'hidden' class to trigger CSS opacity transition
+                setTimeout(function () {
+                    alert.style.display = 'none'; // Optionally set display to none after fade out
+                }, 500); // Duration matches the CSS transition time
+            }, 3000); // Start fade-out after 3 seconds
         }
-    }, 3000);  // Start fade-out after 3 seconds
+    });
 </script>
-
 <style>
     .card-title {
-        font-family: 'Poppins', sans-serif; /* Apply modern font */
-        font-weight: 600; /* Slightly bolder for emphasis */
-        font-size: 28px; /* Larger size for a modern look */
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 28px;
         margin-bottom: 10px;
-        color: #333; /* Dark text for better readability */
+        color: #333;
     }
 
     .card-text {
-        font-family: 'Poppins', sans-serif; /* Apply the same modern font */
+        font-family: 'Poppins', sans-serif;
         font-weight: 400;
         font-size: 18px;
-        line-height: 1.6; /* Improve readability with spacing */
+        line-height: 1.6;
         color: #555;
     }
 
     .card {
-        background: rgba(255, 255, 255, 0.5); /* 50% transparency */
+        background: rgba(255, 255, 255, 0.5);
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
         border-radius: 12px;
         padding: 30px;
@@ -80,13 +71,44 @@
         .btn-primary:hover {
             background-color: #0056b3;
         }
+    #success-alert {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 500;
+        font-size: 16px;
+        padding: 15px 20px;
+        border-radius: 8px;
+        width: 100%; /* Ensure it takes the full width of the parent */
+        max-width: none; /* Remove any max-width constraint */
+        text-align: center;
+        box-sizing: border-box; /* Include padding in width calculation */
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        transition: opacity 0.5s ease-out;
+        position: absolute; /* Position within the relative container */
+        top: 0;
+        left: 0;
+        right: 0;
+        margin: 0; /* Remove margins */
+    }
+        #success-alert.hidden {
+            opacity: 0;
+        }
+
+    .success-message-container {
+        margin-top: 20px;
+        min-height: 60px; /* Ensure container has a consistent height */
+        position: relative; /* For positioning the alert */
+        width: 400px; /* Ensure it takes the full available width */
+    }
+
+
+    .alert-placeholder {
+        height: 60px; /* Adjust to match the height of the alert */
+    }
 </style>
 
-
-
-<!-- Display a different message if the cart is empty -->
 @if (isCartEmpty)
 {
+    <!-- Empty Cart Message -->
     <div class="empty-cart-message">
         <div class="card">
             <div class="card-body">
@@ -101,9 +123,9 @@
         </div>
     </div>
 }
-
 else
 {
+    <!-- Cart Content -->
     <table class="table">
         <thead>
             <tr>
@@ -118,7 +140,9 @@ else
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.Product.Name</td>
+                    <td style="text-align: left;">
+                        @($"{counter++}. {item.Product.Name}") <!-- Display counter + product name -->
+                    </td>
                     <td>
                         <form asp-action="UpdateQuantity" method="post" class="d-inline">
                             <input type="hidden" name="productId" value="@item.ProductId" />
@@ -140,6 +164,7 @@ else
                         </form>
                     </td>
                 </tr>
+
             }
         </tbody>
     </table>
@@ -158,3 +183,22 @@ else
         </form>
     </div>
 }
+
+<!-- Success message always at the bottom -->
+<div class="success-message-container">
+    @if (TempData["Success"] != null)
+    {
+        <div id="success-alert" class="alert alert-success" role="alert">
+            @TempData["Success"]
+        </div>
+    }
+    else
+    {
+        <!-- Empty placeholder to maintain space -->
+        <div class="alert-placeholder"></div>
+    }
+</div>
+
+
+
+
