@@ -2,13 +2,9 @@
 
 @{
     ViewData["Title"] = "Product Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-</head>
 <!-- Embedded Styles -->
 <style>
         /* Star Styles */
@@ -132,7 +128,6 @@
         color: #333333; /* Dark text for better readability on yellow background */
     }
 </style>
-<body>
 <div class="container product-details mt-5">
     <div class="row align-items-center">
         <!-- Product Image Section -->
@@ -168,8 +163,7 @@
                         </span>
                     </p>
 
-
-                @if (User.Identity.IsAuthenticated)
+                @if (User.Identity?.IsAuthenticated == true)
                 {
                     <form asp-controller="ShoppingCart" asp-action="AddToCart" method="post">
                         <input type="hidden" name="productId" value="@Model.Product.ProductId" />
@@ -338,6 +332,5 @@
 
     </div>
         }
-
-    </body>
-</html>
+</div>
+    
