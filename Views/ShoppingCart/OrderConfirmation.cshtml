@@ -10,7 +10,7 @@
 <p>Thank you for your purchase! Your order number is <strong>@Model.OrderId</strong>.</p>
 
 <h3>Order Details</h3>
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
             <th>Product</th>
@@ -26,10 +26,13 @@
                 <td>@item.Product.Name</td>
                 <td>@item.Quantity</td>
                 <td>@item.Price.ToString("C")</td>
-                <td>@(item.Quantity * item.Price).ToString("C")</td>
+                <td>@((item.Quantity * item.Price).ToString("C"))</td>
             </tr>
         }
     </tbody>
 </table>
 
 <p><strong>Total Amount:</strong> @Model.TotalAmount.ToString("C")</p>
+
+<!-- "My Orders" Button -->
+<a asp-action="Index" asp-controller="Orders" class="btn btn-primary mt-3">My Orders</a>
