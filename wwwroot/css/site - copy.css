@@ -221,6 +221,63 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
+/* Shopping Cart Title */
+.cart-title {
+    font-size: 3rem;
+    font-weight: 700;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    color: white;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Shopping Cart Table */
+.table {
+    width: 80%;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+    .table th {
+        background-color: #007bff;
+        color: white;
+        padding: 15px;
+        font-size: 1.1rem;
+        text-align: center;
+    }
+
+    .table td {
+        padding: 15px;
+        text-align: center;
+        font-size: 1rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    /* Hover effect for rows */
+    .table tbody tr:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+/* Quantity Input Styling */
+.quantity-input {
+    width: 80px;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+/* Total Price Styling */
+.total-price {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-top: 15px;
+    font-weight: 600;
+    color: #333;
+}
+
 /* Button Group Styling */
 .button-group {
     display: flex;
