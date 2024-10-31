@@ -120,8 +120,6 @@
     }
 </style>
 
-<h2 class="page-title">Select a Payment Card</h2>
-
 @if (!Model.Any())
 {
     <div class="container centered-container">
@@ -133,17 +131,17 @@
 }
 else
 {
-    <form asp-action="PlaceOrder" asp-controller="ShoppingCart" method="post">
+    <form asp-action="PlaceOrder" asp-controller="ShoppingCart" method="post" onsubmit="return preventMultipleSubmissions()">
         @Html.AntiForgeryToken()
         <div class="container card-container">
             <div class="wallet-title">My Wallet</div>
 
-             @if (TempData["Error"] != null)
-             {
-                 <div class="alert-insufficient">
-                     @TempData["Error"]
-                 </div>
-             }
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert-insufficient">
+                    @TempData["Error"]
+                </div>
+            }
 
             <div class="card-list">
                 @foreach (var card in Model.Where(c => c.IsActive))
@@ -151,18 +149,35 @@ else
                     <div class="card-item">
                         <input type="radio" name="selectedCardId" value="@card.CardId" id="card@card.CardId" required />
                         <label for="card@card.CardId">
-                            **** **** **** @card.CardNumber.Substring(card.CardNumber.Length - 4)
+                            @card.CardHolderName - **** **** **** @card.CardNumber.Substring(card.CardNumber.Length - 4)
                             <span>(Balance: @card.Balance.ToString("C"))</span>
                         </label>
-                        <a asp-action="DeleteCard" asp-controller="Payment" asp-route-id="@card.CardId" class="btn btn-danger">Remove</a>
+                        <a asp-action="DeleteCard" asp-controller="Payment" asp-route-id="@card.CardId" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Remove
+                        </a>
                     </div>
                 }
             </div>
 
             <div class="button-group">
-                <button type="submit" class="btn btn-primary">Place Your Order</button>
-                <a asp-action="AddCard" asp-controller="Payment" class="btn btn-secondary">Add a New Card</a>
+                <button type="submit" class="btn btn-primary" id="submitButton">
+                    <i class="fas fa-shopping-cart"></i> Place Your Order
+                </button>
+                <a asp-action="AddCard" asp-controller="Payment" class="btn btn-secondary">
+                    <i class="fas fa-plus-circle"></i> Add a New Card
+                </a>
             </div>
         </div>
     </form>
+}
+
+@section Scripts {
+    <script>
+        function preventMultipleSubmissions() {
+            const submitButton = document.getElementById('submitButton');
+            submitButton.disabled = true; // Disable the button after the first click
+            submitButton.innerText = "Processing..."; // Provide feedback to the user
+            return true; // Allow the form to be submitted
+        }
+    </script>
 }

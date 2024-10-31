@@ -17,6 +17,12 @@ namespace MiniWebApplication.Models
         [ValidateNever] // Prevent validation of this property
         public User User { get; set; }
 
+        // Cardholder Name
+        [Required]
+        [Display(Name = "Cardholder Name")]
+        [StringLength(100)]
+        public string CardHolderName { get; set; }
+
         // Card Details
         [Required]
         [Display(Name = "Card Number")]

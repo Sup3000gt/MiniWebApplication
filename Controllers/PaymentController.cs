@@ -24,8 +24,6 @@ namespace MiniWebApplication.Controllers
         }
 
         // POST: Payment/AddCard
-        // PaymentController.cs
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddCard(PaymentCard card)
