@@ -1,0 +1,27 @@
+﻿@model MiniWebApplication.ViewModels.CheckoutViewModel
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<!-- Shopping cart details omitted for brevity -->
+
+<h3>Select a Payment Card</h3>
+<form asp-action="PlaceOrder" asp-controller="ShoppingCart" method="post">
+    @Html.AntiForgeryToken()
+    @foreach (var card in Model.PaymentCards)
+    {
+        <div class="form-group">
+            <input type="radio" name="selectedCardId" value="@card.CardId" required />
+            <label>
+                **** **** **** @card.CardNumber.Substring(card.CardNumber.Length - 4)
+                (Balance: @card.Balance.ToString("C"))
+            </label>
+            <!-- Use an anchor link for the Delete action -->
+            <a asp-action="DeleteCard" asp-controller="Payment" asp-route-id="@card.CardId" class="btn btn-link">Delete</a>
+        </div>
+    }
+    <button type="submit" class="btn btn-primary">Use Selected Card</button>
+</form>

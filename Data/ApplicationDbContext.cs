@@ -18,5 +18,37 @@ namespace MiniWebApplication.Data
         public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
         public DbSet<PaymentCard> PaymentCards { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Other configurations...
+
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.PaymentCard)
+                .WithMany()
+                .HasForeignKey(o => o.PaymentCardId)
+                .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes
+
+            // Configure decimal properties for precision and scale
+            modelBuilder.Entity<PaymentCard>()
+                .Property(p => p.Balance)
+                .HasColumnType("decimal(18, 2)");
+
+            modelBuilder.Entity<Product>()
+                .Property(p => p.Price)
+                .HasColumnType("decimal(18, 2)");
+
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.PaymentCard)
+                .WithMany()
+                .HasForeignKey(o => o.PaymentCardId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<OrderDetail>()
+                .Property(od => od.Price)
+                .HasColumnType("decimal(18, 2)");
+        }
+
     }
 }

@@ -21,8 +21,14 @@ namespace MiniWebApplication.Models
 
         [Required]
         [Column(TypeName = "decimal(18, 2)")]
-        public decimal TotalAmount { get; set; } 
+        public decimal TotalAmount { get; set; }
+
+        public int? PaymentCardId { get; set; }
+
+        [ForeignKey("PaymentCardId")]
+        public PaymentCard PaymentCard { get; set; }
 
         public ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }
+

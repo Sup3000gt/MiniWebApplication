@@ -1,5 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace MiniWebApplication.Models
 {
@@ -9,8 +10,11 @@ namespace MiniWebApplication.Models
         public int CardId { get; set; }
 
         // Foreign key to User
-        [ForeignKey("User")]
+        [Required]
         public int UserId { get; set; }
+
+        [ForeignKey("UserId")]
+        [ValidateNever] // Prevent validation of this property
         public User User { get; set; }
 
         // Card Details
@@ -22,7 +26,7 @@ namespace MiniWebApplication.Models
 
         [Required]
         [Display(Name = "Expiration Date")]
-        [RegularExpression(@"^(0[1-9]|1[0-2])\/?([0-9]{2})$", ErrorMessage = "Invalid expiration date format (MM/YY).")]
+        [RegularExpression(@"^(0[1-9]|1[0-2])/([0-9]{2})$", ErrorMessage = "Invalid expiration date format (MM/YY).")]
         public string ExpirationDate { get; set; } // Format MM/YY
 
         [Required]
@@ -33,6 +37,7 @@ namespace MiniWebApplication.Models
         [Required]
         [Display(Name = "Balance")]
         [DataType(DataType.Currency)]
+        [Column(TypeName = "decimal(18, 2)")]
         [Range(0, double.MaxValue, ErrorMessage = "Balance cannot be negative.")]
         public decimal Balance { get; set; } // Available balance
 
@@ -41,10 +46,6 @@ namespace MiniWebApplication.Models
         [Display(Name = "Billing Address Line 1")]
         [StringLength(100)]
         public string BillingAddressLine1 { get; set; }
-
-        [Display(Name = "Billing Address Line 2")]
-        [StringLength(100)]
-        public string BillingAddressLine2 { get; set; }
 
         [Required]
         [Display(Name = "City")]
@@ -60,11 +61,7 @@ namespace MiniWebApplication.Models
         [Display(Name = "Postal Code")]
         [StringLength(20)]
         public string BillingPostalCode { get; set; }
-
-        [Required]
-        [Display(Name = "Country")]
-        [StringLength(50)]
-        public string BillingCountry { get; set; }
+        public bool IsActive { get; set; } = true;
 
         // Constructor
         public PaymentCard()
@@ -73,11 +70,9 @@ namespace MiniWebApplication.Models
             ExpirationDate = string.Empty;
             CVV = string.Empty;
             BillingAddressLine1 = string.Empty;
-            BillingAddressLine2 = string.Empty;
             BillingCity = string.Empty;
             BillingState = string.Empty;
             BillingPostalCode = string.Empty;
-            BillingCountry = string.Empty;
         }
     }
 }

@@ -1,0 +1,50 @@
+﻿@model IEnumerable<MiniWebApplication.Models.PaymentCard>
+
+<h2>Select a Payment Card</h2>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+<h3>Active Cards</h3>
+
+@{
+    var activeCards = Model.Where(c => c.IsActive);
+}
+
+@if (!activeCards.Any())
+{
+    <p>You have no active payment cards. Please <a asp-action="AddCard" asp-controller="Payment">add a new card</a>.</p>
+}
+else
+{
+    <form asp-action="PlaceOrder" asp-controller="ShoppingCart" method="post">
+        @Html.AntiForgeryToken()
+        <div>
+            @foreach (var card in activeCards)
+            {
+                <div class="form-group">
+                    <input type="radio" name="selectedCardId" value="@card.CardId" required />
+                    <label>
+                        **** **** **** @card.CardNumber.Substring(card.CardNumber.Length - 4)
+                        (Balance: @card.Balance.ToString("C"))
+                    </label>
+                    <!-- Use an anchor link for the Remove button -->
+                    <a asp-action="DeleteCard" asp-controller="Payment" asp-route-id="@card.CardId" class="btn btn-warning btn-sm">Remove</a>
+                </div>
+            }
+        </div>
+        <button type="submit" class="btn btn-primary">Place Your Order</button>
+    </form>
+}
+
+<a asp-action="AddCard" class="btn btn-secondary">Add a New Card</a>

@@ -1,0 +1,17 @@
+﻿@model MiniWebApplication.Models.PaymentCard
+
+@{
+    ViewData["Title"] = "Delete Card";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete Payment Card</h2>
+
+<p>Are you sure you want to delete this card?</p>
+<p>Card Number: **** **** **** @Model.CardNumber.Substring(Model.CardNumber.Length - 4)</p>
+
+<form asp-action="DeleteCardConfirmed" asp-route-id="@Model.CardId" method="post">
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="SelectCard" class="btn btn-secondary">Cancel</a>
+</form>

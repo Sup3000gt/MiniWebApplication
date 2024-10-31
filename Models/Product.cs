@@ -16,8 +16,9 @@ namespace MiniWebApplication.Models
         [StringLength(1000, ErrorMessage = "Description cannot exceed 1000 characters.")]
         public string Description { get; set; }
 
-        [Required(ErrorMessage = "Price is required.")]
-        [Range(0.01, 10000.00, ErrorMessage = "Price must be between $0.01 and $10,000.")]
+        [Required]
+        [Column(TypeName = "decimal(18, 2)")]
+        [Range(0, double.MaxValue, ErrorMessage = "Price cannot be negative.")]
         public decimal Price { get; set; }
 
         public string ImageUrl { get; set; } // Internal use only
