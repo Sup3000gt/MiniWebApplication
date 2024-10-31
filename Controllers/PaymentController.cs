@@ -71,12 +71,12 @@ namespace MiniWebApplication.Controllers
 
             if (!paymentCards.Any())
             {
-                TempData["Error"] = "No active payment cards available. Please add a payment method.";
-                return RedirectToAction("AddCard", "Payment");
+                TempData["Info"] = "You have no active payment cards. Please add a payment method.";
             }
 
             return View(paymentCards);
         }
+
 
 
         // POST: Payment/SelectCard

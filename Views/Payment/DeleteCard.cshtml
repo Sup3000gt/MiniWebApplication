@@ -1,17 +1,79 @@
 ﻿@model MiniWebApplication.Models.PaymentCard
 
 @{
-    ViewData["Title"] = "Delete Card";
+    ViewData["Title"] = "Delete Payment Card";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Delete Payment Card</h2>
+<style>
+    /* Styles for DeleteCard page */
+    .delete-container {
+        background: rgba(255, 255, 255, 0.5);
+        padding: 30px 40px;
+        border-radius: 10px;
+        text-align: center;
+        width: 40%;
+        margin: 50px auto;
+    }
 
-<p>Are you sure you want to delete this card?</p>
-<p>Card Number: **** **** **** @Model.CardNumber.Substring(Model.CardNumber.Length - 4)</p>
+    .delete-title {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 10px;
+    }
 
-<form asp-action="DeleteCardConfirmed" asp-route-id="@Model.CardId" method="post">
-    @Html.AntiForgeryToken()
-    <button type="submit" class="btn btn-danger">Delete</button>
-    <a asp-action="SelectCard" class="btn btn-secondary">Cancel</a>
-</form>
+    .delete-message {
+        font-size: 1.2rem;
+        color: #555;
+        margin: 15px 0;
+    }
+
+    .card-info {
+        font-weight: bold;
+        color: #333;
+        font-size: 1.1rem;
+        margin-bottom: 20px;
+    }
+
+    .button-group {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .btn-delete {
+        padding: 10px 20px;
+        font-size: 1rem;
+        border-radius: 5px;
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-cancel {
+        padding: 10px 20px;
+        font-size: 1rem;
+        border-radius: 5px;
+        background-color: #6c757d;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+</style>
+
+<div class="delete-container">
+    <h2 class="delete-title">Delete Payment Card</h2>
+    <p class="delete-message">Are you sure you want to delete this card?</p>
+    <p class="card-info">Card Number: **** **** **** @Model.CardNumber.Substring(@Model.CardNumber.Length - 4)</p>
+
+    <form asp-action="DeleteCardConfirmed" asp-route-id="@Model.CardId" method="post">
+        @Html.AntiForgeryToken()
+        <div class="button-group">
+            <button type="submit" class="btn-delete">Delete</button>
+            <a asp-action="SelectCard" class="btn-cancel">Cancel</a>
+        </div>
+    </form>
+</div>

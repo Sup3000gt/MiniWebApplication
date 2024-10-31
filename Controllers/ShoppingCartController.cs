@@ -146,8 +146,8 @@ namespace MiniWebApplication.Controllers
 
             if (!paymentCards.Any())
             {
-                TempData["Error"] = "No payment cards available. Please add a payment method.";
-                return RedirectToAction("AddCard", "Payment");
+                TempData["Info"] = "You have no active payment cards. Please add a payment method.";
+                return RedirectToAction("SelectCard", "Payment");
             }
 
             // Get cart items and calculate total amount
@@ -180,21 +180,21 @@ namespace MiniWebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> PlaceOrder(int selectedCardId)
         {
+            // Redirect to SelectCard page without error if no card is selected (handled by front-end validation).
+            if (selectedCardId == 0)
+            {
+                return RedirectToAction("SelectCard", "Payment");
+            }
+
             int userId = GetUserId();
 
             var paymentCard = await _context.PaymentCards
                 .Where(c => c.CardId == selectedCardId && c.UserId == userId && c.IsActive)
                 .FirstOrDefaultAsync();
 
-            if (paymentCard == null || paymentCard.UserId != userId)
+            if (paymentCard == null)
             {
-                TempData["Error"] = "Invalid payment method!";
-                return RedirectToAction("SelectCard", "Payment");
-            }
-
-            if (selectedCardId == 0)
-            {
-                TempData["Error"] = "No payment method selected!";
+                TempData["Error"] = "Selected payment method is invalid or inactive.";
                 return RedirectToAction("SelectCard", "Payment");
             }
 
@@ -209,27 +209,23 @@ namespace MiniWebApplication.Controllers
                 return RedirectToAction("Index");
             }
 
-            // Calculate the total amount
             decimal totalAmount = cartItems.Sum(item => item.Quantity * item.Product.Price);
 
-            // Check if the card has enough balance
             if (paymentCard.Balance < totalAmount)
             {
                 TempData["Error"] = "Purchase failed: Insufficient funds on the selected card. Please contact your bank or use a different card.";
                 return RedirectToAction("SelectCard", "Payment");
             }
 
-            // Begin transaction
             using (var transaction = await _context.Database.BeginTransactionAsync())
             {
                 try
                 {
-                    // Deduct the amount from the card
+                    // Deduct the order amount from the payment card balance
                     paymentCard.Balance -= totalAmount;
                     _context.PaymentCards.Update(paymentCard);
                     await _context.SaveChangesAsync();
 
-                    // Create new order
                     var order = new Order
                     {
                         UserId = userId,
@@ -240,7 +236,6 @@ namespace MiniWebApplication.Controllers
                     _context.Orders.Add(order);
                     await _context.SaveChangesAsync(); // Save to get the Order ID
 
-                    // Create order details
                     foreach (var item in cartItems)
                     {
                         var orderDetail = new OrderDetail
@@ -248,17 +243,18 @@ namespace MiniWebApplication.Controllers
                             OrderId = order.OrderId,
                             ProductId = item.ProductId,
                             Quantity = item.Quantity,
-                            Price = item.Product.Price  // Save the product price at the time of the order
+                            Price = item.Product.Price 
                         };
                         _context.OrderDetails.Add(orderDetail);
                     }
 
                     await _context.SaveChangesAsync();
 
-                    // Clear the cart
+                    // Clear the user's shopping cart
                     _context.ShoppingCartItems.RemoveRange(cartItems);
                     await _context.SaveChangesAsync();
 
+                    // Commit the transaction after all changes are successfully saved
                     await transaction.CommitAsync();
 
                     TempData["Success"] = "Order placed successfully!";
@@ -266,13 +262,13 @@ namespace MiniWebApplication.Controllers
                 }
                 catch (Exception)
                 {
+                    // Roll back the transaction if any error occurs during the process
                     await transaction.RollbackAsync();
                     TempData["Error"] = "An error occurred while processing your order.";
                     return RedirectToAction("Index");
                 }
             }
         }
-
 
         public IActionResult OrderConfirmation(int orderId)
         {

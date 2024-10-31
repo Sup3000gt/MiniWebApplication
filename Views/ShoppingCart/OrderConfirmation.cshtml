@@ -5,34 +5,103 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>@ViewData["Title"]</h2>
+<h2 class="page-title">@ViewData["Title"]</h2>
+<div class="title-line"></div> <!-- Line below the title -->
 
-<p>Thank you for your purchase! Your order number is <strong>@Model.OrderId</strong>.</p>
+<div class="confirmation-container">
+    <p>Thank you for your purchase! Your order number is <strong>@Model.OrderId</strong>.</p>
 
-<h3>Order Details</h3>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Product</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Subtotal</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.OrderDetails)
-        {
+    <h3>Order Details</h3>
+    <table class="table table-striped rounded-table">
+        <thead>
             <tr>
-                <td>@item.Product.Name</td>
-                <td>@item.Quantity</td>
-                <td>@item.Price.ToString("C")</td>
-                <td>@((item.Quantity * item.Price).ToString("C"))</td>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Subtotal</th>
             </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderDetails)
+            {
+                <tr>
+                    <td>@item.Product.Name</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Price.ToString("C")</td>
+                    <td>@((item.Quantity * item.Price).ToString("C"))</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <p><strong>Total Amount:</strong> @Model.TotalAmount.ToString("C")</p>
+
+    <!-- "My Orders" Button -->
+    <a asp-action="Index" asp-controller="Orders" class="btn btn-primary mt-3">My Orders</a>
+</div>
+
+<style>
+    .page-title {
+        text-align: center;
+        font-weight: bold;
+        font-size: 2rem;
+        color: white; /* Set title color to white */
+        margin-top: 20px;
+    }
+
+    /* Line under title */
+    .title-line {
+        width: 65%; 
+        max-width: 1000px; 
+        height: 3px;
+        background-color: white;
+        margin: 10px auto 20px auto;
+        border-radius: 2px;
+    }
+
+    /* Confirmation container styling */
+    .confirmation-container {
+        background: rgba(255, 255, 255, 0.5);
+        padding: 30px;
+        border-radius: 15px;
+        width: 60%;
+        margin: 20px auto;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+        .confirmation-container p,
+        .confirmation-container h3,
+        .confirmation-container table,
+        .confirmation-container a {
+            color: #333;
         }
-    </tbody>
-</table>
 
-<p><strong>Total Amount:</strong> @Model.TotalAmount.ToString("C")</p>
+    /* Rounded table styling */
+    .rounded-table {
+        border-radius: 15px;
+        overflow: hidden;
+    }
 
-<!-- "My Orders" Button -->
-<a asp-action="Index" asp-controller="Orders" class="btn btn-primary mt-3">My Orders</a>
+        /* Header Row Styling */
+        .rounded-table thead th {
+            background-color: #007bff; /* Change to desired color */
+            color: white;
+            font-weight: bold;
+        }
+
+    .table-striped > tbody > tr:nth-of-type(odd) {
+        background-color: rgba(0, 0, 0, 0.05); /* Custom striped background */
+    }
+
+    .btn-primary {
+        padding: 10px 20px;
+        font-size: 1rem;
+        border-radius: 5px;
+        color: white;
+        border: none;
+        background-color: #007bff;
+        cursor: pointer;
+        text-decoration: none;
+    }
+</style>

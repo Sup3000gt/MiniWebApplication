@@ -1,50 +1,168 @@
 ﻿@model IEnumerable<MiniWebApplication.Models.PaymentCard>
 
-<h2>Select a Payment Card</h2>
-
 @{
+    ViewData["Title"] = "Select a Payment Card";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger">@TempData["Error"]</div>
-}
-@if (TempData["Success"] != null)
-{
-    <div class="alert alert-success">@TempData["Success"]</div>
-}
+<style>
+    /* Styles for SelectCard page */
+    .page-title {
+        text-align: center;
+        font-weight: bold;
+        font-size: 2rem;
+        color: #333;
+        margin: 20px 0;
+    }
 
-<h3>Active Cards</h3>
+    .centered-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 50vh;
+    }
 
-@{
-    var activeCards = Model.Where(c => c.IsActive);
-}
+    .message-box {
+        background: rgba(255, 255, 255, 0.5);
+        padding: 20px 40px;
+        border-radius: 10px;
+        text-align: center;
+    }
 
-@if (!activeCards.Any())
+        .message-box p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+    .btn-primary {
+        padding: 10px 20px;
+        font-size: 1rem;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    .card-container {
+        background: rgba(255, 255, 255, 0.5);
+        padding: 30px;
+        border-radius: 10px;
+        width: 100%;
+        margin: 20px auto;
+        text-align: center;
+    }
+
+    .wallet-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .card-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .card-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 15px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+        .card-item label {
+            flex-grow: 1;
+            margin-left: 10px;
+            font-size: 1.1rem;
+        }
+
+    .btn-danger {
+        padding: 5px 10px;
+        font-size: 0.9rem;
+        border-radius: 5px;
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    .button-group {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .btn-secondary {
+        padding: 10px 20px;
+        font-size: 1rem;
+        border-radius: 5px;
+        background-color: #6c757d;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    .alert-insufficient {
+        color: #721c24;
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        font-size: 1rem;
+    }
+</style>
+
+<h2 class="page-title">Select a Payment Card</h2>
+
+@if (!Model.Any())
 {
-    <p>You have no active payment cards. Please <a asp-action="AddCard" asp-controller="Payment">add a new card</a>.</p>
+    <div class="container centered-container">
+        <div class="message-box">
+            <p>You have no active payment cards. Please add a payment method.</p>
+            <a asp-action="AddCard" asp-controller="Payment" class="btn btn-primary">Add a New Card</a>
+        </div>
+    </div>
 }
 else
 {
     <form asp-action="PlaceOrder" asp-controller="ShoppingCart" method="post">
         @Html.AntiForgeryToken()
-        <div>
-            @foreach (var card in activeCards)
-            {
-                <div class="form-group">
-                    <input type="radio" name="selectedCardId" value="@card.CardId" required />
-                    <label>
-                        **** **** **** @card.CardNumber.Substring(card.CardNumber.Length - 4)
-                        (Balance: @card.Balance.ToString("C"))
-                    </label>
-                    <!-- Use an anchor link for the Remove button -->
-                    <a asp-action="DeleteCard" asp-controller="Payment" asp-route-id="@card.CardId" class="btn btn-warning btn-sm">Remove</a>
-                </div>
-            }
+        <div class="container card-container">
+            <div class="wallet-title">My Wallet</div>
+
+             @if (TempData["Error"] != null)
+             {
+                 <div class="alert-insufficient">
+                     @TempData["Error"]
+                 </div>
+             }
+
+            <div class="card-list">
+                @foreach (var card in Model.Where(c => c.IsActive))
+                {
+                    <div class="card-item">
+                        <input type="radio" name="selectedCardId" value="@card.CardId" id="card@card.CardId" required />
+                        <label for="card@card.CardId">
+                            **** **** **** @card.CardNumber.Substring(card.CardNumber.Length - 4)
+                            <span>(Balance: @card.Balance.ToString("C"))</span>
+                        </label>
+                        <a asp-action="DeleteCard" asp-controller="Payment" asp-route-id="@card.CardId" class="btn btn-danger">Remove</a>
+                    </div>
+                }
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn btn-primary">Place Your Order</button>
+                <a asp-action="AddCard" asp-controller="Payment" class="btn btn-secondary">Add a New Card</a>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">Place Your Order</button>
     </form>
 }
-
-<a asp-action="AddCard" class="btn btn-secondary">Add a New Card</a>
