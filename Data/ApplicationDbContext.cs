@@ -16,5 +16,7 @@ namespace MiniWebApplication.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
+        public DbSet<PaymentCard> PaymentCards { get; set; }
+
     }
 }
