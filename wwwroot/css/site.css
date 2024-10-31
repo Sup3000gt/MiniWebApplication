@@ -108,43 +108,43 @@ h1, h2, h3, h4, h5, h6 {
     margin: 0;
 }
 
-.input-group .form-control {
-    border: none;
-    height: 50px;
-    padding: 0 20px;
-    flex: 1;
-    background: transparent;
-    outline: none;
-    box-shadow: none;
-    margin: 0; /* Explicitly set margin */
-    font-size: 16px; /* Reset font size for input text */
-    vertical-align: middle;
-}
+    .input-group .form-control {
+        border: none;
+        height: 50px;
+        padding: 0 20px;
+        flex: 1;
+        background: transparent;
+        outline: none;
+        box-shadow: none;
+        margin: 0; /* Explicitly set margin */
+        font-size: 16px; /* Reset font size for input text */
+        vertical-align: middle;
+    }
 
-.input-group .btn {
-    position: relative;
-    border: none;
-    height: 50px;
-    min-height: 50px;
-    padding: 0 25px;
-    background: #007bff;
-    color: white;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    white-space: nowrap;
-    font-size: 16px; /* Reset font size for button text */
-    vertical-align: middle;
-}
+    .input-group .btn {
+        position: relative;
+        border: none;
+        height: 50px;
+        min-height: 50px;
+        padding: 0 25px;
+        background: #007bff;
+        color: white;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+        font-size: 16px; /* Reset font size for button text */
+        vertical-align: middle;
+    }
 
-/* Add this to force remove any possible spaces */
-.input-group > * {
-    margin: 0;
-    border: 0;
-    padding-left: 0;
-    padding-right: 0;
-}
+    /* Add this to force remove any possible spaces */
+    .input-group > * {
+        margin: 0;
+        border: 0;
+        padding-left: 0;
+        padding-right: 0;
+    }
 
 .form-control:focus {
     box-shadow: none;
@@ -612,13 +612,13 @@ button.submit-btn {
     overflow-y: auto; /* Only enable scroll if needed */
 }
 
-/* Review List Item Styling */
-.reviews-list li {
-    margin-bottom: 10px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Separator between reviews */
-    padding-bottom: 5px;
-    color: rgba(0, 0, 0, 1); /* Fully opaque text */
-}
+    /* Review List Item Styling */
+    .reviews-list li {
+        margin-bottom: 10px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Separator between reviews */
+        padding-bottom: 5px;
+        color: rgba(0, 0, 0, 1); /* Fully opaque text */
+    }
 
 .review-form h3 {
     margin-bottom: 10px;
@@ -714,4 +714,3 @@ textarea {
     .star-rating label:hover {
         color: #ffca08; /* Hover effect */
     }
-

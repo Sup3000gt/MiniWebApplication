@@ -140,24 +140,24 @@ namespace MiniWebApplication.Controllers
             return RedirectToAction("RegistrationSuccess");
         }
 
-        public async Task<IActionResult> TestEmailTemplate()
-        {
-            var emailModel = new EmailViewModel
-            {
-                FirstName = "TestUser",
-                ConfirmationLink = "https://example.com/confirm"
-            };
+        //public async Task<IActionResult> TestEmailTemplate()
+        //{
+        //    var emailModel = new EmailViewModel
+        //    {
+        //        FirstName = "TestUser",
+        //        ConfirmationLink = "https://example.com/confirm"
+        //    };
 
-            try
-            {
-                var htmlContent = await _razorViewToStringRenderer.RenderViewToStringAsync("~/Views/Shared/ConfirmEmailHtml.cshtml", emailModel);
-                return Content(htmlContent, "text/html");
-            }
-            catch (Exception ex)
-            {
-                return Content($"Error: {ex.Message}");
-            }
-        }
+        //    try
+        //    {
+        //        var htmlContent = await _razorViewToStringRenderer.RenderViewToStringAsync("~/Views/Shared/ConfirmEmailHtml.cshtml", emailModel);
+        //        return Content(htmlContent, "text/html");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Content($"Error: {ex.Message}");
+        //    }
+        //}
 
 
         [HttpGet]
