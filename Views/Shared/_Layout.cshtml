@@ -41,19 +41,28 @@
                         <li class="nav-item">
                             <a class="nav-link active" href="@Url.Action("Index", "Products")">Products</a>
                         </li>
+
                         @if (User.Identity?.IsAuthenticated == true)
                         {
-                            <li class="nav-item">
-                                <a class="nav-link" href="@Url.Action("SelectCard", "Payment")">My Wallet</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="@Url.Action("Index", "Orders")">My Orders</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="@Url.Action("Index", "ShoppingCart")">Shopping Cart</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-danger" href="@Url.Action("Logout", "Account")">Logout</a>
+                            <!-- Dropdown Menu for My Account -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    My Account
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="accountDropdown">
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("SelectCard", "Payment")">My Wallet</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("Index", "Orders")">My Orders</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("Index", "ShoppingCart")">Shopping Cart</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item text-danger" href="@Url.Action("Logout", "Account")">Logout</a>
+                                    </li>
+                                </ul>
                             </li>
                         }
                         else
