@@ -5,83 +5,157 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>@ViewData["Title"]</h2>
+<h1 class="cart-title">@ViewData["Title"]</h1>
 
-@* Display validation summary *@
 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-<form asp-action="AddCard" method="post">
-    @Html.AntiForgeryToken()
 
-    <!-- Cardholder Name Field -->
-    <div class="form-group">
-        <label asp-for="CardHolderName"></label>
-        <input asp-for="CardHolderName" class="form-control" placeholder="Enter cardholder name" />
-        <span asp-validation-for="CardHolderName" class="text-danger"></span>
-    </div>
+<div class="form-container">
+    <form asp-action="AddCard" method="post">
+        @Html.AntiForgeryToken()
 
-    <!-- Card Number Field -->
-    <div class="form-group">
-        <label asp-for="CardNumber"></label>
-        <input asp-for="CardNumber" class="form-control" />
-        <span asp-validation-for="CardNumber" class="text-danger"></span>
-    </div>
+        <!-- Cardholder Name Field -->
+        <div class="form-group">
+            <label asp-for="CardHolderName"></label>
+            <input asp-for="CardHolderName" class="form-control rounded" />
+            <span asp-validation-for="CardHolderName" class="text-danger"></span>
+        </div>
 
-    <!-- Expiration Date Field -->
-    <div class="form-group">
-        <label asp-for="ExpirationDate"></label>
-        <input asp-for="ExpirationDate" class="form-control" placeholder="MM/YY" />
-        <span asp-validation-for="ExpirationDate" class="text-danger"></span>
-    </div>
+        <!-- Card Number Field -->
+        <div class="form-group">
+            <label asp-for="CardNumber"></label>
+            <input asp-for="CardNumber" class="form-control rounded" />
+            <span asp-validation-for="CardNumber" class="text-danger"></span>
+        </div>
 
-    <!-- CVV Field -->
-    <div class="form-group">
-        <label asp-for="CVV"></label>
-        <input asp-for="CVV" class="form-control" />
-        <span asp-validation-for="CVV" class="text-danger"></span>
-    </div>
+        <!-- Expiration Date Field -->
+        <div class="form-group">
+            <label asp-for="ExpirationDate"></label>
+            <input asp-for="ExpirationDate" class="form-control rounded" placeholder="MM/YY" />
+            <span asp-validation-for="ExpirationDate" class="text-danger"></span>
+        </div>
 
-    <!-- Balance Field -->
-    <div class="form-group">
-        <label asp-for="Balance"></label>
-        <input asp-for="Balance" class="form-control" />
-        <span asp-validation-for="Balance" class="text-danger"></span>
-    </div>
+        <!-- CVV Field -->
+        <div class="form-group">
+            <label asp-for="CVV"></label>
+            <input asp-for="CVV" class="form-control rounded" />
+            <span asp-validation-for="CVV" class="text-danger"></span>
+        </div>
 
-    <h3>Billing Address</h3>
+        <!-- Balance Field -->
+        <div class="form-group">
+            <label asp-for="Balance"></label>
+            <input asp-for="Balance" class="form-control rounded" />
+            <span asp-validation-for="Balance" class="text-danger"></span>
+        </div>
 
-    <!-- Billing Address Line 1 Field -->
-    <div class="form-group">
-        <label asp-for="BillingAddressLine1"></label>
-        <input asp-for="BillingAddressLine1" class="form-control" />
-        <span asp-validation-for="BillingAddressLine1" class="text-danger"></span>
-    </div>
+        <h3 class="section-title">Billing Address</h3>
 
-    <!-- Billing City Field -->
-    <div class="form-group">
-        <label asp-for="BillingCity"></label>
-        <input asp-for="BillingCity" class="form-control" />
-        <span asp-validation-for="BillingCity" class="text-danger"></span>
-    </div>
+        <!-- Billing Address Line 1 Field -->
+        <div class="form-group">
+            <label asp-for="BillingAddressLine1"></label>
+            <input asp-for="BillingAddressLine1" class="form-control rounded" />
+            <span asp-validation-for="BillingAddressLine1" class="text-danger"></span>
+        </div>
 
-    <!-- Billing State Field -->
-    <div class="form-group">
-        <label asp-for="BillingState"></label>
-        <input asp-for="BillingState" class="form-control" />
-        <span asp-validation-for="BillingState" class="text-danger"></span>
-    </div>
+        <!-- Billing City Field -->
+        <div class="form-group">
+            <label asp-for="BillingCity"></label>
+            <input asp-for="BillingCity" class="form-control rounded" />
+            <span asp-validation-for="BillingCity" class="text-danger"></span>
+        </div>
 
-    <!-- Billing Postal Code Field -->
-    <div class="form-group">
-        <label asp-for="BillingPostalCode"></label>
-        <input asp-for="BillingPostalCode" class="form-control" />
-        <span asp-validation-for="BillingPostalCode" class="text-danger"></span>
-    </div>
+        <!-- Billing State Field with Searchable Dropdown -->
+        <div class="form-group position-relative">
+            <label asp-for="BillingState">State/Province</label>
+            <input type="text" id="stateSearch" class="form-control rounded" onfocus="toggleDropdown(true)" oninput="filterStates()" autocomplete="off" />
+            <span asp-validation-for="BillingState" class="text-danger"></span>
 
-    <button type="submit" class="btn btn-primary">Add Card</button>
-</form>
+            <!-- Dropdown list of states -->
+            <div id="stateDropdown" class="dropdown-menu" style="width: 100%; max-height: 150px; overflow-y: auto;">
+                @foreach (var state in new string[] {
+                "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut",
+                "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana",
+                "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts",
+                "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada",
+                "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota",
+                "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina",
+                "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington",
+                "West Virginia", "Wisconsin", "Wyoming"
+                    })
+                {
+                    <div class="dropdown-item" onclick="setStateValue('@state')">@state</div>
+                }
+            </div>
+        </div>
 
+        <!-- Billing Postal Code Field -->
+        <div class="form-group">
+            <label asp-for="BillingPostalCode"></label>
+            <input asp-for="BillingPostalCode" class="form-control rounded" />
+            <span asp-validation-for="BillingPostalCode" class="text-danger"></span>
+        </div>
+
+        <div class="button-container">
+            <button type="submit" class="btn btn-primary submit-btn">Add Card</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    function filterStates() {
+        const input = document.getElementById("stateSearch").value.toLowerCase();
+        const dropdown = document.getElementById("stateDropdown");
+        const items = dropdown.getElementsByClassName("dropdown-item");
+        for (let i = 0; i < items.length; i++) {
+            const item = items[i];
+            item.style.display = item.innerText.toLowerCase().includes(input) ? "" : "none";
+        }
+    }
+
+    function setStateValue(state) {
+        const input = document.getElementById("stateSearch");
+        input.value = state;
+        toggleDropdown(false); // Close dropdown after selection
+    }
+
+    function toggleDropdown(show) {
+        const dropdown = document.getElementById("stateDropdown");
+        dropdown.style.display = show ? "block" : "none";
+    }
+</script>
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
 }
+
+<style>
+    .form-container {
+        background: rgba(255, 255, 255, 0.8);
+        padding: 30px;
+        border-radius: 15px;
+        width: 100%;
+        max-width: 700px;
+        margin: 0 auto;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: white;
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        z-index: 1000;
+    }
+
+    .dropdown-item {
+        padding: 8px 12px;
+        cursor: pointer;
+    }
+
+        .dropdown-item:hover {
+            background-color: #f0f0f0;
+        }
+</style>

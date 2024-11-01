@@ -8,24 +8,10 @@
     var usdCulture = new CultureInfo("en-US");
     bool isCartEmpty = !Model.Any();  // Check if the cart is empty
     int counter = 1; // Initialize the counter
-    <link rel="stylesheet" href="/css/cart.css"> <!-- Specific to the cart view -->
 }
 
 <h1 class="cart-title">Shopping Cart</h1>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var alert = document.getElementById('success-alert');
-        if (alert) {
-            setTimeout(function () {
-                alert.classList.add('hidden'); // Add the 'hidden' class to trigger CSS opacity transition
-                setTimeout(function () {
-                    alert.style.display = 'none'; // Optionally set display to none after fade out
-                }, 500); // Duration matches the CSS transition time
-            }, 3000); // Start fade-out after 3 seconds
-        }
-    });
-</script>
 <style>
     .card-title {
         font-family: 'Poppins', sans-serif;
@@ -72,39 +58,6 @@
         .btn-primary:hover {
             background-color: #0056b3;
         }
-    #success-alert {
-        font-family: 'Poppins', sans-serif;
-        font-weight: 500;
-        font-size: 16px;
-        padding: 15px 20px;
-        border-radius: 8px;
-        width: 100%; /* Ensure it takes the full width of the parent */
-        max-width: none; /* Remove any max-width constraint */
-        text-align: center;
-        box-sizing: border-box; /* Include padding in width calculation */
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-        transition: opacity 0.5s ease-out;
-        position: absolute; /* Position within the relative container */
-        top: 0;
-        left: 0;
-        right: 0;
-        margin: 0; /* Remove margins */
-    }
-        #success-alert.hidden {
-            opacity: 0;
-        }
-
-    .success-message-container {
-        margin-top: 20px;
-        min-height: 60px; /* Ensure container has a consistent height */
-        position: relative; /* For positioning the alert */
-        width: 400px; /* Ensure it takes the full available width */
-    }
-
-
-    .alert-placeholder {
-        height: 60px; /* Adjust to match the height of the alert */
-    }
 </style>
 
 @if (isCartEmpty)
@@ -184,22 +137,3 @@ else
         </form>
     </div>
 }
-
-<!-- Success message always at the bottom -->
-<div class="success-message-container">
-    @if (TempData["Success"] != null)
-    {
-        <div id="success-alert" class="alert alert-success" role="alert">
-            @TempData["Success"]
-        </div>
-    }
-    else
-    {
-        <!-- Empty placeholder to maintain space -->
-        <div class="alert-placeholder"></div>
-    }
-</div>
-
-
-
-
