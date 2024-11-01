@@ -1,9 +1,25 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace MiniWebApplication.Models
 {
+    public class FutureDateAttribute : ValidationAttribute
+    {
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            if (value != null && DateTime.TryParseExact(value.ToString(), "MM/yy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime expirationDate))
+            {
+                expirationDate = expirationDate.AddMonths(1).AddDays(-1); // Set expiration to the end of the month
+                if (expirationDate >= DateTime.Now)
+                {
+                    return ValidationResult.Success;
+                }
+            }
+            return new ValidationResult("The expiration date must be in the future.");
+        }
+    }
     public class PaymentCard
     {
         [Key]
@@ -19,20 +35,20 @@ namespace MiniWebApplication.Models
 
         // Cardholder Name
         [Required]
-        [Display(Name = "Cardholder Name")]
+        [Display(Name = "Name")]
         [StringLength(100)]
-        public string CardHolderName { get; set; }
+        public string Name { get; set; }
 
         // Card Details
         [Required]
         [Display(Name = "Card Number")]
-        [CreditCard(ErrorMessage = "Invalid card number")]
         [StringLength(16, MinimumLength = 13, ErrorMessage = "Card number must be between 13 and 16 digits.")]
         public string CardNumber { get; set; }
 
         [Required]
         [Display(Name = "Expiration Date")]
         [RegularExpression(@"^(0[1-9]|1[0-2])/([0-9]{2})$", ErrorMessage = "Invalid expiration date format (MM/YY).")]
+        [FutureDate(ErrorMessage = "The expiration date must be in the future.")] // Add custom validation attribute here
         public string ExpirationDate { get; set; } // Format MM/YY
 
         [Required]

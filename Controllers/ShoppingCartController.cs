@@ -205,9 +205,10 @@ namespace MiniWebApplication.Controllers
 
             if (!cartItems.Any())
             {
-                TempData["Error"] = "Your cart is empty!";
-                return RedirectToAction("Index");
+                TempData["Error"] = "Your cart is empty! Order can not be create!";
+                return RedirectToAction("SelectCard", "Payment"); 
             }
+
 
             decimal totalAmount = cartItems.Sum(item => item.Quantity * item.Product.Price);
 

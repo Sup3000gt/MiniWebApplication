@@ -16,9 +16,9 @@
 
         <!-- Cardholder Name Field -->
         <div class="form-group">
-            <label asp-for="CardHolderName"></label>
-            <input asp-for="CardHolderName" class="form-control rounded" />
-            <span asp-validation-for="CardHolderName" class="text-danger"></span>
+            <label asp-for="Name">Name</label>
+            <input asp-for="Name" class="form-control rounded" />
+            <span asp-validation-for="Name" class="text-danger"></span>
         </div>
 
         <!-- Card Number Field -->
@@ -68,7 +68,7 @@
         <!-- Billing State Field with Searchable Dropdown -->
         <div class="form-group position-relative">
             <label asp-for="BillingState">State/Province</label>
-            <input type="text" id="stateSearch" class="form-control rounded" onfocus="toggleDropdown(true)" oninput="filterStates()" autocomplete="off" />
+            <input asp-for="BillingState" id="stateSearch" class="form-control rounded" onfocus="toggleDropdown(true)" oninput="filterStates()" autocomplete="off" />
             <span asp-validation-for="BillingState" class="text-danger"></span>
 
             <!-- Dropdown list of states -->
@@ -89,6 +89,7 @@
             </div>
         </div>
 
+
         <!-- Billing Postal Code Field -->
         <div class="form-group">
             <label asp-for="BillingPostalCode"></label>
@@ -98,7 +99,9 @@
 
         <div class="button-container">
             <button type="submit" class="btn btn-primary submit-btn">Add Card</button>
+            <a asp-action="SelectCard" asp-controller="Payment" class="btn btn-secondary cancel-btn">Cancel</a>
         </div>
+
     </form>
 </div>
 
