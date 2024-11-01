@@ -727,3 +727,45 @@ textarea {
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2); /* Soft shadow for contrast */
 }
 
+/* General table styling for rounded corners */
+table {
+    border-radius: 15px;
+    overflow: hidden; /* Ensures rounded corners are visible */
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: adds subtle shadow for depth */
+}
+
+    /* Header styling */
+    table th {
+        background-color: #007bff; /* Blue color for header background */
+        color: #ffffff; /* White text color */
+        padding: 10px;
+        font-size: 1rem; /* Adjust as needed */
+        text-align: left;
+        border: none !important;
+    }
+
+    /* Data row styling */
+    table td {
+        background-color: #ffffff; /* White background for data cells */
+        color: #333333; /* Dark text color for readability */
+        padding: 10px;
+        font-size: 1rem; /* Adjust as needed */
+        text-align: left;
+        border: none !important;
+    }
+
+    /* Optional row separator */
+    table tr:not(:last-child) td {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Light border just for row separation */
+    }
+
+/* Outer container styling */
+.table-container {
+    background-color: white; /* Ensures table background is white */
+    padding: 15px;
+    border-radius: 15px; /* Outer container also gets rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px; /* Adds space between tables or other elements */
+}
+

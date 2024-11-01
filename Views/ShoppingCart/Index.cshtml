@@ -98,10 +98,9 @@ else
                         @($"{counter++}. {item.Product.Name}") <!-- Display counter + product name -->
                     </td>
                     <td>
-                        <form asp-action="UpdateQuantity" method="post" class="d-inline">
+                        <form asp-action="UpdateQuantity" method="post" class="d-inline d-flex align-items-center">
                             <input type="hidden" name="productId" value="@item.ProductId" />
-                            <input type="number" name="quantity" value="@item.Quantity" min="1"
-                                   class="form-control quantity-input" />
+                            <input type="number" name="quantity" value="@item.Quantity" min="1" class="form-control quantity-input me-2" style="width: 60px;" />
                             <button type="submit" class="btn btn-primary btn-sm">
                                 <i class="fas fa-sync-alt"></i> Update
                             </button>
