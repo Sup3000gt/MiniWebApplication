@@ -25,6 +25,11 @@ namespace MiniWebApplication.Models
 
         [NotMapped] // This ensures the field is not mapped to the database
         public IFormFile ImageFile { get; set; } // For file upload
+        public string Tags { get; set; } // new column for recommendation system
+
+        [Required]
+        [Range(0, int.MaxValue, ErrorMessage = "Inventory cannot be negative.")]
+        public int Inventory { get; set; }
 
         // Constructor to initialize properties
         public Product()
@@ -32,7 +37,8 @@ namespace MiniWebApplication.Models
             Name = string.Empty;
             Description = string.Empty;
             ImageUrl = string.Empty;
-            // ImageFile can remain null if appropriate
+            Tags = string.Empty;
+            Inventory = 100;
         }
     }
 }
