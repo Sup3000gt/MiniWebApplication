@@ -17,12 +17,13 @@ namespace MiniWebApplication.Data
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
         public DbSet<PaymentCard> PaymentCards { get; set; }
+        public DbSet<UserProfile> UserProfiles { get; set; }
+        public DbSet<ProductPopularity> ProductPopularities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Other configurations...
 
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.PaymentCard)
