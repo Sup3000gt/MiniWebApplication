@@ -99,6 +99,14 @@ namespace MiniWebApplication.Controllers
                 string blobUrl = await UploadImageToBlob(product.ImageFile, containerName);
                 product.ImageUrl = blobUrl;
 
+                var tagExtractor = new SimpleTagExtractor();
+                // Generate tags based on the product description
+                var tags = tagExtractor.ExtractTags(product.Description);
+
+                // Convert list of tags to a comma-separated string
+                product.Tags = string.Join(",", tags);
+
+
                 // Save product to the database
                 _context.Add(product);
                 await _context.SaveChangesAsync();

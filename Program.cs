@@ -131,7 +131,7 @@ namespace MiniWebApplication
 
             app.UseRouting();
 
-            // Custom middleware for logging request paths
+
             // Custom middleware for logging request paths
             app.Use(async (context, next) =>
             {
