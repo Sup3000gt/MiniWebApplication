@@ -10,6 +10,7 @@ using MiniWebApplication.Services;
 using MiniWebApplication.ViewModels;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace MiniWebApplication.Controllers
 {
@@ -69,8 +70,6 @@ namespace MiniWebApplication.Controllers
 
             return View(viewModel);
         }
-
-
 
         // GET: Products/Create
         [Authorize] // Allows any authenticated user
