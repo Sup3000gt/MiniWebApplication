@@ -180,7 +180,6 @@ namespace MiniWebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> PlaceOrder(int selectedCardId)
         {
-            // Redirect to SelectCard page without error if no card is selected (handled by front-end validation).
             if (selectedCardId == 0)
             {
                 return RedirectToAction("SelectCard", "Payment");
@@ -205,10 +204,9 @@ namespace MiniWebApplication.Controllers
 
             if (!cartItems.Any())
             {
-                TempData["Error"] = "Your cart is empty! Order can not be create!";
-                return RedirectToAction("SelectCard", "Payment"); 
+                TempData["Error"] = "Your cart is empty! Order cannot be created!";
+                return RedirectToAction("SelectCard", "Payment");
             }
-
 
             decimal totalAmount = cartItems.Sum(item => item.Quantity * item.Product.Price);
 
@@ -216,6 +214,16 @@ namespace MiniWebApplication.Controllers
             {
                 TempData["Error"] = "Purchase failed: Insufficient funds on the selected card. Please contact your bank or use a different card.";
                 return RedirectToAction("SelectCard", "Payment");
+            }
+
+            // Check if each product has sufficient inventory
+            foreach (var item in cartItems)
+            {
+                if (item.Product.Inventory < item.Quantity)
+                {
+                    TempData["Error"] = $"Not enough inventory for {item.Product.Name}. Only {item.Product.Inventory} available.";
+                    return RedirectToAction("SelectCard", "Payment");
+                }
             }
 
             using (var transaction = await _context.Database.BeginTransactionAsync())
@@ -227,6 +235,7 @@ namespace MiniWebApplication.Controllers
                     _context.PaymentCards.Update(paymentCard);
                     await _context.SaveChangesAsync();
 
+                    // Create the order
                     var order = new Order
                     {
                         UserId = userId,
@@ -239,12 +248,17 @@ namespace MiniWebApplication.Controllers
 
                     foreach (var item in cartItems)
                     {
+                        // Deduct the inventory
+                        item.Product.Inventory -= item.Quantity;
+                        _context.Products.Update(item.Product);
+
+                        // Create order detail entry
                         var orderDetail = new OrderDetail
                         {
                             OrderId = order.OrderId,
                             ProductId = item.ProductId,
                             Quantity = item.Quantity,
-                            Price = item.Product.Price 
+                            Price = item.Product.Price
                         };
                         _context.OrderDetails.Add(orderDetail);
                     }
