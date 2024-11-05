@@ -16,10 +16,12 @@ namespace MiniWebApplication.Controllers
     public class ShoppingCartController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<ShoppingCartController> _logger;
 
-        public ShoppingCartController(ApplicationDbContext context)
+        public ShoppingCartController(ApplicationDbContext context, ILogger<ShoppingCartController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // Safely get the user ID from claims
@@ -137,43 +139,45 @@ namespace MiniWebApplication.Controllers
 
         // POST: ShoppingCart/Checkout
         [HttpPost]
-        public IActionResult Checkout()
-        {
-            int userId = GetUserId();
+        //public IActionResult Checkout()
+        //{
+        //    _logger.LogInformation("Checkout method was called");
+        //    Console.WriteLine("Checkout method was called");
+        //    int userId = GetUserId();
 
-            // Get available payment cards for the user
-            var paymentCards = _context.PaymentCards.Where(c => c.UserId == userId).ToList();
+        //    // Get available payment cards for the user
+        //    var paymentCards = _context.PaymentCards.Where(c => c.UserId == userId && c.IsActive).ToList();
 
-            if (!paymentCards.Any())
-            {
-                TempData["Info"] = "You have no active payment cards. Please add a payment method.";
-                return RedirectToAction("SelectCard", "Payment");
-            }
+        //    if (!paymentCards.Any())
+        //    {
+        //        TempData["Info"] = "You have no active payment cards. Please add a payment method.";
+        //        return RedirectToAction("SelectCard", "Payment");
+        //    }
 
-            // Get cart items and calculate total amount
-            var cartItems = _context.ShoppingCartItems
-                .Where(c => c.UserId == userId)
-                .Include(c => c.Product)
-                .ToList();
+        //    // Get cart items and calculate total amount
+        //    var cartItems = _context.ShoppingCartItems
+        //        .Where(c => c.UserId == userId)
+        //        .Include(c => c.Product)
+        //        .ToList();
 
-            if (!cartItems.Any())
-            {
-                TempData["Error"] = "Your cart is empty!";
-                return RedirectToAction("Index");
-            }
+        //    if (!cartItems.Any())
+        //    {
+        //        TempData["Error"] = "Your cart is empty!";
+        //        return RedirectToAction("Index");
+        //    }
 
-            decimal totalAmount = cartItems.Sum(item => item.Quantity * item.Product.Price);
+        //    decimal totalAmount = cartItems.Sum(item => item.Quantity * item.Product.Price);
 
-            // Prepare a model or ViewBag data to send both paymentCards and totalAmount to the view
-            var checkoutViewModel = new CheckoutViewModel
-            {
-                PaymentCards = paymentCards,
-                CartItems = cartItems,
-                TotalAmount = totalAmount
-            };
+        //    // Prepare a model or ViewBag data to send both paymentCards and totalAmount to the view
+        //    var checkoutViewModel = new CheckoutViewModel
+        //    {
+        //        PaymentCards = paymentCards,
+        //        CartItems = cartItems,
+        //        TotalAmount = totalAmount
+        //    };
 
-            return View(checkoutViewModel);
-        }
+        //    return View(checkoutViewModel);
+        //}
 
         // POST: ShoppingCart/PlaceOrder
         [HttpPost]

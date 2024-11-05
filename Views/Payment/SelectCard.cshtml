@@ -149,7 +149,7 @@ else
                     <div class="card-item">
                         <input type="radio" name="selectedCardId" value="@card.CardId" id="card@card.CardId" required />
                         <label for="card@card.CardId">
-                            @card.Name - **** **** **** @card.CardNumber.Substring(card.CardNumber.Length - 4)
+                            @card.Name - **** **** **** @card.LastFourDigits
                             <span>(Balance: @card.Balance.ToString("C"))</span>
                         </label>
                         <a asp-action="DeleteCard" asp-controller="Payment" asp-route-id="@card.CardId" class="btn btn-danger">
