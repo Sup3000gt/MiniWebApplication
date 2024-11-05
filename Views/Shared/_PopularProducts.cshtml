@@ -1,0 +1,20 @@
+﻿@model List<MiniWebApplication.Models.Product>
+
+<div class="recommendation-box">
+    <h4 class="mb-3 text-visible-on-blue">Popular Dishes</h4>
+    <ul class="list-group">
+        @foreach (var product in Model)
+        {
+            <li class="list-group-item border-0 px-0 py-2">
+                <a href="@Url.Action("Details", "Products", new { id = product.ProductId })" class="d-flex align-items-center text-decoration-none">
+                    <img src="@product.ImageUrl" alt="@product.Name" style="max-width: 100%; height: auto;" class="me-3 rounded" />
+                </a>
+            </li>
+        }
+    </ul>
+</div>
+<style>
+    .text-visible-on-blue {
+        color: #ffffff; /* White for maximum contrast */
+    }
+</style>

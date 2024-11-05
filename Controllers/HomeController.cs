@@ -11,6 +11,7 @@ namespace MiniWebApplication.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context;
 
+
         public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
         {
             _logger = logger;
@@ -62,7 +63,7 @@ namespace MiniWebApplication.Controllers
             ViewData["CurrentPage"] = page;
             ViewData["TotalPages"] = totalPages;
 
-            return View("Index", products);
+            return View("QueryResult", products);
         }
 
     }

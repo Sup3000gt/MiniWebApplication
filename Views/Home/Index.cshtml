@@ -1,85 +1,121 @@
-﻿@model IEnumerable<Product>
+﻿@model IEnumerable<MiniWebApplication.Models.Product>
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Welcome";
-
-    var currentPage = ViewData["CurrentPage"] as int? ?? 1;
-    var totalPages = ViewData["TotalPages"] as int? ?? 1;
-    var searchQuery = ViewData["SearchQuery"] as string ?? string.Empty;
-    var isSearchExecuted = ViewData["IsSearchExecuted"] as bool? ?? false;
 }
 
-<!-- Hero Section -->
-<div class="hero-section d-flex justify-content-start align-items-center flex-column" style="height: 90vh; background: transparent;">
-    <!-- Wrapper for MSSA Text and Search Bar -->
-    <div class="content-wrapper d-flex flex-column align-items-center">
-        <!-- Image (MSSA Text) -->
-        <img src="~/images/cover-removebg.png" alt="Cover Image" style="max-width: 1700px; height: auto;" />
-
-        <!-- Search Form -->
-        <form asp-action="Search" asp-controller="Home" method="get" class="search-form" style="width: 100%; max-width: 600px; margin: 20px auto;">
-            <div class="input-group" style="display: flex; align-items: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 50px; overflow: hidden; background: white; padding: 0; margin: 0;">
-                <input type="text" name="query" class="form-control rounded-start" placeholder="Search delicious dishes..." aria-label="Search" value="@searchQuery" style="border: none; height: 50px; padding: 0 20px; flex: 1; background: transparent; outline: none; box-sizing: border-box; margin: 0; font-size: 16px; vertical-align: middle;" />
-                <button type="submit" class="btn btn-primary rounded-end" style="height: 50px; padding: 0 25px; background: #007bff; color: white; border: none; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer; box-sizing: border-box;">
-                    <i class="fas fa-search"></i> Search
-                </button>
-            </div>
-        </form>
+<!-- Main Container for Centered Layout -->
+<div class="container-fluid d-flex justify-content-center" style="max-width: 1200px; padding: 0 15px;">
+    <!-- Sidebar: Popular Products -->
+    <div class="sidebar-container">
+        <div id="popular-products" class="popular-products-container">
+            <p>Loading popular products...</p>
+        </div>
     </div>
-</div>
 
-<!-- Products Grid -->
-<div class="container" style="margin-top: -200px;">
-    <div class="row">
-        @if (Model != null && Model.Any())
-        {
-            @foreach (var product in Model)
-            {
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100 d-flex flex-column">
-                        <img src="@product.ImageUrl" alt="@product.Name" class="card-img-top product-image" />
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">@product.Name</h5>
-                            <p class="card-text">@product.Description</p>
-                            <p class="card-text font-weight-bold">Price: $@product.Price</p>
+    <!-- Main Content -->
+    <div class="main-content flex-grow-1 d-flex flex-column align-items-center">
+        <!-- Hero Section -->
+        <div class="hero-section d-flex justify-content-center align-items-center flex-column" style="height: 90vh; background: transparent;">
+            <!-- Wrapper for MSSA Text and Search Bar -->
+            <div class="content-wrapper d-flex flex-column align-items-center">
+                <!-- Image (MSSA Text) -->
+                <img src="~/images/cover-removebg.png" alt="Cover Image" style="max-width: 1700px; height: auto;" />
 
-                            <!-- Button Container to Align Buttons -->
-                            <div class="mt-auto">
-                                <a href="@Url.Action("Details", "Products", new { id = product.ProductId })"
-                                   class="btn btn-primary btn-sm d-flex align-items-center justify-content-start"
-                                   style="width: 180px; height: 40px;">
-                                    <i class="fas fa-info-circle me-2"></i> View Details
-                                </a>
-
-
-                            </div>
-                        </div>
+                <!-- Search Form -->
+                <form asp-action="Search" asp-controller="Home" method="get" class="search-form w-100" style="max-width: 600px; margin: 20px auto;">
+                    <div class="input-group rounded-pill overflow-hidden shadow-sm">
+                        <input type="text" name="query" class="form-control" placeholder="Search delicious dishes..." aria-label="Search" style="height: 50px; padding: 0 20px; font-size: 16px;" />
+                        <button type="submit" class="btn btn-primary" style="height: 50px; padding: 0 25px; font-size: 16px;">
+                            <i class="fas fa-search me-2"></i> Search
+                        </button>
                     </div>
-                </div>
-            }
-        }
-        else if (isSearchExecuted)
-        {
-            <div class="col-12 text-center">
-                <p>No products found matching your search.</p>
+                </form>
             </div>
-        }
+        </div>
     </div>
 </div>
 
+<style>
+    .content-wrapper {
+        margin-top: -300px;
+    }
 
-<!-- Pagination Controls -->
-@if (totalPages > 1)
-{
-    <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center">
-            @for (int i = 1; i <= totalPages; i++)
-            {
-                <li class="page-item @(i == currentPage ? "active" : "")">
-                    <a class="page-link" href="@Url.Action("Search", "Home", new { query = searchQuery, page = i })">@i</a>
-                </li>
+    .sidebar-container {
+        display: flex; /* Establishes this container as a flex container */
+        flex-direction: column; /* Aligns children in a vertical stack */
+        justify-content: center; /* Centers content vertically within the container */
+        text-align: center; /* Centers text within the container */
+        width: 100%;
+        border-radius: 15px;
+        padding: 20px;
+        margin-top: 0px; /* Adjusted margin */
+        margin-right: -10%; /* Normalized margin, consider viewport size */
+        margin-bottom: 20px;
+    }
+
+    .popular-products-container {
+        background-color: transparent; /* Make sure the background doesn't override */
+        padding: 10px;
+        border-radius: 15px; /* Ensure this matches the parent if it needs to inherit the rounding */
+        overflow: hidden; /* This will ensure that all inner elements adhere to this border curve */
+    }
+
+        .popular-products-container li {
+            width: 200px; /* Adjust width as necessary */
+            height: 120px; /* Adjust height as necessary */
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+            border-radius: 15px; /* Ensures rounded corners */
+            background-color: #fff; /* Gives a background to images with transparency */
+        }
+
+            .popular-products-container li:first-child {
+                border-top-left-radius: 15px;
+                border-top-right-radius: 15px;
             }
-        </ul>
-    </nav>
+
+            .popular-products-container li img {
+                max-height: 100%; /* Constrain image size to fit the container */
+                max-width: 100%; /* Prevents overflow */
+            }
+
+    .popular-products-container li span {
+        flex-grow: 1; /* Allows the text to fill the available space */
+        text-align: center;
+    }
+    .popular-products-container li:last-child {
+        margin-bottom: 0;
+        border-radius: 15px;
+    }
+
+    .popular-products-container li:hover {
+        background-color: rgba(245, 245, 245, 0.5);
+        cursor: pointer;
+        border-radius: 15px;
+    }
+</style>
+
+
+<!-- JavaScript to Fetch and Load Popular Products -->
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('@Url.Action("GetTopPopularProducts", "Recommendation")')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(html => {
+                    document.getElementById("popular-products").innerHTML = html;
+                })
+                .catch(error => console.error('Error loading popular products:', error));
+        });
+    </script>
 }
