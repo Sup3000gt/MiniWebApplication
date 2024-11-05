@@ -44,12 +44,56 @@
         cursor: pointer;
     }
 
+    .personal-recommendation-box {
+        position: absolute;
+        background: transparent;
+        top: 50px; /* Adjust the top position as needed */
+        left: 30px; /* Position the box on the left side */
+        width: 350px; /* Set a maximum width of 300px */
+        height: calc(100% - 100px); /* Adjust the height to fill the available space */
+        border-radius: 15px;
+        padding: 20px;
+        overflow-y: hidden; /* Add vertical scrolling if the content exceeds the height */
+        overflow-x: hidden;
+        text-align: center;
+    }
+        /* Style the container that holds the images */
+        .personal-recommendation-box ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 10px; /* Space between each image */
+        }
+
+            /* Style each image item */
+            .personal-recommendation-box ul li {
+                width: 200px; /* Full width of the container */
+                height: 120px; /* Fixed height for each image */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: #fff; /* White background for each item */
+                border-radius: 10px;
+                overflow: hidden;
+            }
+
+                .personal-recommendation-box ul li img {
+                    max-width: 100%;
+                    max-height: 100%;
+                    object-fit: cover; /* Crop to fit the container */
+                    border-radius: 10px;
+                }
+    /* Update the styles for the card-container */
     .card-container {
         background: rgba(255, 255, 255, 0.5);
         padding: 30px;
         border-radius: 10px;
-        width: 100%;
-        margin: 20px auto;
+        width: calc(100% - 350px); /* Reduce the width to accommodate the personal-recommendation-box */
+        margin: 20px auto 20px 350px; /* Adjust the left margin to create space for the personal-recommendation-box */
         text-align: center;
     }
 
@@ -169,6 +213,13 @@ else
             </div>
         </div>
     </form>
+
+            <!-- Recommended Products Section -->
+    <div class="personal-recommendation-box mt-4">
+            <div id="recommendedProducts">
+                <!-- Recommended products will be loaded here -->
+            </div>
+        </div>
 }
 
 @section Scripts {
@@ -179,5 +230,27 @@ else
             submitButton.innerText = "Processing..."; // Provide feedback to the user
             return true; // Allow the form to be submitted
         }
+    </script>
+    <script>
+        function loadRecommendedProducts() {
+            var userId = "@User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value" || null;
+
+            if (userId) {
+                $.get('@Url.Action("RecommendProduct", "Recommendation")', { userId: userId })
+                    .done(function(data) {
+                        $('#recommendedProducts').html(data);
+                    })
+                    .fail(function(jqXHR, textStatus, errorThrown) {
+                        console.error("Failed to load recommended products:", textStatus, errorThrown);
+                    });
+            } else {
+                console.warn("User is not authenticated, recommendations will not be loaded.");
+                $('#recommendedProducts').html('<p>Please log in to see recommended products.</p>');
+            }
+        }
+
+        $(document).ready(function() {
+            loadRecommendedProducts();
+        });
     </script>
 }

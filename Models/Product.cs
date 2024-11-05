@@ -31,6 +31,9 @@ namespace MiniWebApplication.Models
         [Range(0, int.MaxValue, ErrorMessage = "Inventory cannot be negative.")]
         public int Inventory { get; set; }
 
+        // New Navigation Property
+        public virtual ICollection<ProductPopularity> ProductPopularities { get; set; }
+
         // Constructor to initialize properties
         public Product()
         {
@@ -39,6 +42,7 @@ namespace MiniWebApplication.Models
             ImageUrl = string.Empty;
             Tags = string.Empty;
             Inventory = 100;
+            ProductPopularities = new HashSet<ProductPopularity>();
         }
     }
 }

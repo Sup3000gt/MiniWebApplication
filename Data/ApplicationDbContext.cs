@@ -49,6 +49,12 @@ namespace MiniWebApplication.Data
             modelBuilder.Entity<OrderDetail>()
                 .Property(od => od.Price)
                 .HasColumnType("decimal(18, 2)");
+
+            modelBuilder.Entity<ProductPopularity>()
+                .HasOne(pp => pp.Product)
+                .WithMany(p => p.ProductPopularities)
+                .HasForeignKey(pp => pp.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
     }
