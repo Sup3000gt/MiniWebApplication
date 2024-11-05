@@ -5,6 +5,8 @@ MiniWebApplication is a web application built with ASP.NET Core MVC, providing f
 ## Features
 
 - **Product Browsing**: Search and view available products.
+- **Popular Items**: Display most frequently purchased dishes and trending items.
+- **Personalized Recommendations**: Rule-based recommendation system based on user preferences and tags.
 - **Shopping Cart Management**: Add, update, and remove products from the shopping cart.
 - **Payment Integration**: Manage payment cards in "My Wallet" and select cards for checkout.
 - **User Authentication**: Secure login and registration system.
@@ -23,6 +25,7 @@ MiniWebApplication is a web application built with ASP.NET Core MVC, providing f
 - **AccountController**: User login, logout, registration, and email verification.
 - **OrdersController**: View order history and details.
 - **ReviewsController**: Handle product reviews with Azure Cosmos DB.
+- **RecommendationController**: Handle popular items and personalized recommendations.
 
 ### Data
 
@@ -31,12 +34,14 @@ MiniWebApplication is a web application built with ASP.NET Core MVC, providing f
 
 ### Models
 
-- **User**: Represents registered users with email verification.
-- **Product**: Product details, including name, description, price, and image URL.
+- **User**: Represents registered users with email verification and preference tags.
+- **Product**: Product details, including name, description, price, image URL, and category tags.
 - **ShoppingCartItem**: Items in the shopping cart.
 - **PaymentCard**: Payment card details, including balance and card information.
 - **Order**: User orders and product details.
 - **Review**: Product reviews stored in **Azure Cosmos DB**.
+- **PopularItem**: Tracks product popularity metrics and trending status.
+- **UserPreference**: Stores user preference tags for recommendation system.
 
 ### ViewModels
 
@@ -47,15 +52,17 @@ MiniWebApplication is a web application built with ASP.NET Core MVC, providing f
 - **CosmosDbService**: CRUD operations for reviews in **Azure Cosmos DB**.
 - **EmailService**: Sends email verifications.
 - **OptimizationService**: Improves performance, especially for complex queries.
+- **RecommendationService**: Handles popular items calculation and rule-based recommendations.
 
 ### Views
 
-- **Home**: Product browsing and main page.
+- **Home**: Product browsing and main page with popular items section.
 - **ShoppingCart**: Shopping cart overview and checkout.
 - **Payment**: Manage payment cards ("My Wallet").
 - **Orders**: Past orders and details.
 - **Reviews**: View and add product reviews.
 - **Account**: Login, registration, and verification.
+- **Recommendations**: Personalized product recommendations based on user tags.
 
 ### wwwroot
 
@@ -71,6 +78,7 @@ MiniWebApplication is a web application built with ASP.NET Core MVC, providing f
 2. **Apply Migrations**:
    ```bash
    dotnet ef database update
+   ```
 
 ## Azure Cosmos DB
 
@@ -85,6 +93,7 @@ MiniWebApplication is a web application built with ASP.NET Core MVC, providing f
        "DatabaseName": "<your_database_name>",
        "ContainerName": "<your_container_name>"
    }
+   ```
 
 3. **Initialize the Container (if needed)**: Ensure the specified container exists in the Cosmos DB database for the reviews feature.
 
@@ -99,6 +108,7 @@ MiniWebApplication is a web application built with ASP.NET Core MVC, providing f
        "SenderEmail": "<sender_email>",
        "SenderPassword": "<sender_password>"
    }
+   ```
 
 2. **Features**
   - **Email Verification**: New users receive an email verification link upon registration.
@@ -107,6 +117,8 @@ MiniWebApplication is a web application built with ASP.NET Core MVC, providing f
 
 ### Key Pages
 - **Products**: Browse available products on the main landing page.
+- **Popular Items**: View trending and most purchased dishes.
+- **Recommended for You**: Browse personalized product recommendations based on your preferences.
 - **My Wallet**: Manage payment cards to be used during checkout.
 - **Shopping Cart**: Add, view, and manage items before placing an order.
 - **My Orders**: Access past order details.
@@ -115,6 +127,7 @@ MiniWebApplication is a web application built with ASP.NET Core MVC, providing f
 ### User Authentication
 - **Registration**: Users register and verify their email before accessing full site features.
 - **Login/Logout**: Standard login/logout functionality to protect user data.
+- **Preferences**: Users can set their preference tags for personalized recommendations.
 
 ## Deployment
 
@@ -127,8 +140,9 @@ MiniWebApplication is a web application built with ASP.NET Core MVC, providing f
 
 ## Recent Updates
 
+- **Popular Items Feature**: Added tracking and display of most popular dishes.
+- **Recommendation System**: Implemented rule-based recommendations using user preference tags.
 - **Shopping Cart Bug Fixes**: Resolved cart display issues.
 - **Enhanced Payment Integration**: Improved wallet management features.
 - **Review System**: Added Cosmos DB integration for product reviews.
 - **UI Enhancements**: Adjustments to button arrangement and page layout for improved user experience.
-
