@@ -29,6 +29,7 @@ html, body {
     display: flex;
     flex-direction: column; /* Arrange elements vertically */
     overflow-y:auto;
+    overflow-x:hidden;
 }
 
 main {
