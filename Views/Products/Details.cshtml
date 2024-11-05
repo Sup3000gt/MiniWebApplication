@@ -7,125 +7,93 @@
 
 <!-- Embedded Styles -->
 <style>
-        /* Star Styles */
-    .stars i {
-        font-size: 24px; /* Adjust size if needed */
-        color: #DAA520; /* Darker shade of yellow (Goldenrod) */
-        margin-right: 2px;
-    }
-    /* General Styles for Reviews Titles */
-    .reviews-title {
-        text-align: left;
-        margin-bottom: 20px; /* Increased for better spacing */
-        color: #ffffff; /* White text */
-        font-size: 28px; /* Larger font size for emphasis */
-        font-weight: 700; /* Bold text */
-        position: relative;
-        padding-bottom: 10px; /* Space between text and underline */
-        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-        font-family: 'Helvetica Neue', Arial, sans-serif; /* Modern font */
+    /* Reset conflicting styles */
+    body {
+        margin: 0;
+        padding: 0 !important; /* Override the padding: 20px you had */
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background-color: #333;
     }
 
-    /* Extended Underline for Reviews Titles */
+    /* Main content wrapper */
+    .content-wrapper {
+        flex: 1 0 auto;
+        width: 100%;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Container modifications */
+    .container.product-details {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    /* Navigation fixes */
+    .navbar {
+        position: relative;
+        width: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+    }
+
+    /* Footer fixes */
+    footer {
+        width: 100%;
+        margin-top: auto;
+        flex-shrink: 0;
+    }
+
+    /* Existing styles with modifications */
+    .stars i {
+        font-size: 24px;
+        color: #DAA520;
+        margin-right: 2px;
+    }
+
+    .reviews-title {
+        text-align: left;
+        margin-bottom: 20px;
+        color: #ffffff;
+        font-size: 28px;
+        font-weight: 700;
+        position: relative;
+        padding-bottom: 10px;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+
     .reviews-title::after {
         content: '';
         display: block;
-        width: 1160px; /* Increased length of the underline */
-        height: 4px; /* Thickness of the underline */
-        background-color: #ffffff; /* Color of the underline */
-        margin-top: 8px; /* Space above the underline */
-        border-radius: 2px; /* Rounded edges for a sleek look */
+        width: 100%; /* Changed from fixed width to percentage */
+        max-width: 1160px;
+        height: 4px;
+        background-color: #ffffff;
+        margin-top: 8px;
+        border-radius: 2px;
     }
 
-    /* Responsive Font Size for Smaller Screens */
+    /* Responsive adjustments */
     @@media (max-width: 600px) {
         .reviews-title {
             font-size: 6vw;
         }
-
-        .reviews-title::after {
-            width: 80%; /* Adjust underline length on smaller screens */
-        }
     }
 
-    /* Pagination Styles */
-    .pagination a {
-        margin-right: 5px;
-        text-decoration: none;
-        color: #333333; /* Dark text for better contrast on white background */
-        padding: 8px 12px; /* Increased padding for better clickability */
-        background-color: #ffffff; /* White background */
-        border: 1px solid #ccc; /* Light border for definition */
-        border-radius: 4px; /* Slightly more rounded corners */
-        transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    /* Simplified Active Page Styling */
-
-        .pagination a.active {
-            background-color: #007bff; /* Set background to Bootstrap's primary blue */
-            border: 1px solid #007bff; /* Matching blue border */
-            font-weight: bold; /* Bold text */
-            text-decoration: underline; /* Underline text */
-            transition: border 0.3s ease;
-        }
-
-
-
-    /* Hover Effect with a Brighter Yellow Shade */
-    .pagination a:hover {
-        background-color: #ffd700; /* Brighter yellow background on hover */
-        color: #333333; /* Maintain dark text on hover */
-        border: 1px solid #ffd700; /* Match the border to the brighter background */
-    }
-
-
-    /* Focus Styles for Accessibility */
-    .pagination a:focus {
-        outline: 2px solid #333333; /* Dark outline for focus */
-        outline-offset: 2px;
-    }
-
-    /* Icon Styling (if using icons for active page) */
-    .active-icon {
-        margin-left: 5px;
-        font-size: 14px; /* Adjust size as needed */
-    }
-
-    /* Hover Effect for Enhanced Modern Look */
-    .reviews-title:hover {
-        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-        transform: translateY(-2px);
-        transition: all 0.3s ease;
-    }
-
-    /* Additional Styles for the Container Wrapper */
+    /* Common wrapper modifications */
     .common-wrapper {
         width: 100%;
         max-width: 1200px;
-        margin: auto;
+        margin: 0 auto;
         padding: 10px 20px;
         box-sizing: border-box;
-    }
-
-    /* Remove default padding and margin for better alignment */
-    .reviews-section,
-    .review-form-wrapper {
-        padding: 10px 0;
-        box-sizing: border-box;
-        width: 100%;
-    }
-
-    /* Optional: Dark Background for Better Contrast */
-    body {
-        background-color: #333; /* Dark background for contrast */
-        padding: 20px;
-        font-family: 'Helvetica Neue', Arial, sans-serif;
-    }
-
-    /* Style for Pagination Active Link Text */
-    .pagination a.active {
-        color: #333333; /* Dark text for better readability on yellow background */
     }
 </style>
 <div class="container product-details mt-5">
@@ -333,4 +301,4 @@
     </div>
         }
 </div>
-    
+ 
