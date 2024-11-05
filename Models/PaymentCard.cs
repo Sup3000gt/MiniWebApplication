@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace MiniWebApplication.Models
@@ -42,8 +43,12 @@ namespace MiniWebApplication.Models
         // Card Details
         [Required]
         [Display(Name = "Card Number")]
-        [StringLength(16, MinimumLength = 13, ErrorMessage = "Card number must be between 13 and 16 digits.")]
+        [StringLength(4000, ErrorMessage = "Card number length exceeded.")]
         public string CardNumber { get; set; }
+
+        [Display(Name = "Last Four Digits")]
+        [BindNever]
+        public string LastFourDigits { get; set; }
 
         [Required]
         [Display(Name = "Expiration Date")]
@@ -53,8 +58,9 @@ namespace MiniWebApplication.Models
 
         [Required]
         [Display(Name = "CVV")]
-        [RegularExpression(@"^[0-9]{3,4}$", ErrorMessage = "CVV must be 3 or 4 digits.")]
+        [StringLength(4000, ErrorMessage = "CVV length exceeded.")]
         public string CVV { get; set; }
+
 
         [Required]
         [Display(Name = "Balance")]

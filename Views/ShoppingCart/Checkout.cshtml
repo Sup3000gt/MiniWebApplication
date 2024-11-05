@@ -15,12 +15,13 @@
         <div class="form-group">
             <input type="radio" name="selectedCardId" value="@card.CardId" required />
             <label>
-                **** **** **** @card.CardNumber.Substring(card.CardNumber.Length - 4)
+                **** **** **** @card.LastFourDigits
                 (Balance: @card.Balance.ToString("C"))
             </label>
             <!-- Use an anchor link for the Delete action -->
             <a asp-action="DeleteCard" asp-controller="Payment" asp-route-id="@card.CardId" class="btn btn-link">Delete</a>
         </div>
+
     }
     <button type="submit" class="btn btn-primary">Use Selected Card</button>
 </form>

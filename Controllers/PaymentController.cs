@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MiniWebApplication.Data;
 using MiniWebApplication.Models;
@@ -11,10 +12,12 @@ namespace MiniWebApplication.Controllers
     public class PaymentController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IDataProtector _protector;
 
-        public PaymentController(ApplicationDbContext context)
+        public PaymentController(ApplicationDbContext context, IDataProtectionProvider provider)
         {
             _context = context;
+            _protector = provider.CreateProtector("PaymentCardProtector");
         }
 
         // GET: Payment/AddCard
@@ -28,11 +31,21 @@ namespace MiniWebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddCard(PaymentCard card)
         {
+            ModelState.Remove(nameof(card.LastFourDigits));
+
             if (ModelState.IsValid)
             {
                 try
                 {
-                    card.UserId = GetUserId(); // Ensure UserId is set
+                    card.UserId = GetUserId();
+
+                    // Capture the last four digits before encryption
+                    card.LastFourDigits = card.CardNumber.Substring(card.CardNumber.Length - 4);
+
+                    // Encrypt sensitive fields
+                    card.CardNumber = _protector.Protect(card.CardNumber);
+                    card.CVV = _protector.Protect(card.CVV);
+
                     _context.PaymentCards.Add(card);
                     await _context.SaveChangesAsync();
                     return RedirectToAction("SelectCard");
@@ -74,7 +87,6 @@ namespace MiniWebApplication.Controllers
 
             return View(paymentCards);
         }
-
 
 
         // POST: Payment/SelectCard
