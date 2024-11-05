@@ -217,13 +217,9 @@ namespace MiniWebApplication.Controllers
             }
 
             // Check if each product has sufficient inventory
-            foreach (var item in cartItems)
+            if (!await CheckInventoryAsync(cartItems))
             {
-                if (item.Product.Inventory < item.Quantity)
-                {
-                    TempData["Error"] = $"Not enough inventory for {item.Product.Name}. Only {item.Product.Inventory} available.";
-                    return RedirectToAction("SelectCard", "Payment");
-                }
+                return RedirectToAction("SelectCard", "Payment");
             }
 
             using (var transaction = await _context.Database.BeginTransactionAsync())
@@ -246,24 +242,8 @@ namespace MiniWebApplication.Controllers
                     _context.Orders.Add(order);
                     await _context.SaveChangesAsync(); // Save to get the Order ID
 
-                    foreach (var item in cartItems)
-                    {
-                        // Deduct the inventory
-                        item.Product.Inventory -= item.Quantity;
-                        _context.Products.Update(item.Product);
-
-                        // Create order detail entry
-                        var orderDetail = new OrderDetail
-                        {
-                            OrderId = order.OrderId,
-                            ProductId = item.ProductId,
-                            Quantity = item.Quantity,
-                            Price = item.Product.Price
-                        };
-                        _context.OrderDetails.Add(orderDetail);
-                    }
-
-                    await _context.SaveChangesAsync();
+                    // Process Order Details, Update Inventory, User Profile Tags, and Product Popularity
+                    await ProcessOrderDetailsAsync(order, cartItems, userId);
 
                     // Clear the user's shopping cart
                     _context.ShoppingCartItems.RemoveRange(cartItems);
@@ -275,7 +255,7 @@ namespace MiniWebApplication.Controllers
                     TempData["Success"] = "Order placed successfully!";
                     return RedirectToAction("OrderConfirmation", new { orderId = order.OrderId });
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     // Roll back the transaction if any error occurs during the process
                     await transaction.RollbackAsync();
@@ -301,6 +281,97 @@ namespace MiniWebApplication.Controllers
 
             return View(order);
         }
+  
+        // Check Inventory
+        private async Task<bool> CheckInventoryAsync(List<ShoppingCartItem> cartItems)
+        {
+            foreach (var item in cartItems)
+            {
+                if (item.Product.Inventory < item.Quantity)
+                {
+                    TempData["Error"] = $"Not enough inventory for {item.Product.Name}. Only {item.Product.Inventory} available.";
+                    return false;
+                }
+            }
+            return true;
+        }
+        // Process Order Details, Inventory Deduction
+        private async Task ProcessOrderDetailsAsync(Order order, List<ShoppingCartItem> cartItems, int userId)
+        {
+            foreach (var item in cartItems)
+            {
+                // Deduct the inventory
+                item.Product.Inventory -= item.Quantity;
+                _context.Products.Update(item.Product);
+
+                // Create order detail entry
+                var orderDetail = new OrderDetail
+                {
+                    OrderId = order.OrderId,
+                    ProductId = item.ProductId,
+                    Quantity = item.Quantity,
+                    Price = item.Product.Price
+                };
+                _context.OrderDetails.Add(orderDetail);
+
+                // Update UserProfile table for tags
+                await UpdateUserProfileTagsAsync(userId, item.Product.Tags);
+                // Update ProductPopularity table
+                await UpdateProductPopularityAsync(item.ProductId, item.Quantity);
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        // Update User Profile Tags
+        private async Task UpdateUserProfileTagsAsync(int userId, string tags)
+        {
+            var tagList = tags.Split(',');
+
+            foreach (var tag in tagList)
+            {
+                var userTag = await _context.UserProfiles
+                    .FirstOrDefaultAsync(up => up.UserId == userId && up.Tag == tag);
+
+                if (userTag != null)
+                {
+                    userTag.TagCount += 1; // Increment the tag count
+                }
+                else
+                {
+                    // Add new tag for user
+                    _context.UserProfiles.Add(new UserProfile
+                    {
+                        UserId = userId,
+                        Tag = tag,
+                        TagCount = 1
+                    });
+                }
+            }
+        }
+        //update ProductPopularity
+        private async Task UpdateProductPopularityAsync(int productId, int quantity)
+        {
+            var productPopularity = await _context.ProductPopularities
+                .FirstOrDefaultAsync(pp => pp.ProductId == productId);
+
+            if (productPopularity != null)
+            {
+                productPopularity.SalesCount += quantity; // Increment by quantity ordered
+            }
+            else
+            {
+                // Add new product popularity entry
+                _context.ProductPopularities.Add(new ProductPopularity
+                {
+                    ProductId = productId,
+                    RecordDate = DateTime.Now, // Use current date, or adjust based on your requirements
+                    SalesCount = quantity
+                });
+            }
+        }
+
+
 
     }
 }
