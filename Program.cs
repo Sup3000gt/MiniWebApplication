@@ -71,6 +71,8 @@ namespace MiniWebApplication
                 return new CosmosDbService(cosmosClient, databaseName, containerName, logger);
             });
 
+            // Add Data Protection Service for secure data handling
+            builder.Services.AddDataProtection();
             // Add other necessary services
             builder.Services.AddLogging();
             builder.Services.AddControllersWithViews();
