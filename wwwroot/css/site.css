@@ -73,6 +73,7 @@ h1, h2, h3, h4, h5, h6 {
     padding-bottom: 40px; /* Leave space for footer */
     z-index: 1; /* Ensure content stays above the footer */
     position: relative; /* Required for z-index to work */
+    will-change: transform;
 }
 
 /* Hero section styling */
@@ -254,6 +255,7 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center; /* Align both sections vertically */
     gap: 20px; /* Space between the image and details box */
     margin: 50px;
+    will-change: transform;
 }
 
 /* Product Image Styling */
@@ -388,6 +390,7 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     justify-content: space-between;
     margin: 50px;
+    will-change: transform;
 }
 
 .image-section {
@@ -439,6 +442,7 @@ h1, h2, h3, h4, h5, h6 {
     margin-right: auto;
     overflow-y: auto;
     box-sizing: border-box; /* Ensures padding is included in width */
+    will-change: transform;
 }
 
 

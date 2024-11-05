@@ -5,6 +5,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml"; // Ensure this points to the correct layout file
 }
 
+<div id="loading-spinner" class="spinner-container">
+    <p class="loading-text">Loading...</p>
+    <div class="spinner"></div>
+</div>
+<div id="content" style="display: none;">
 <h1 class="cart-title">Products</h1>
 
 @* Add New Product Button *@
@@ -21,7 +26,7 @@
     {
         <div class="col-md-4 mb-4">
             <div class="card h-100">
-                <img src="@Url.Content(product.ImageUrl)" class="card-img-top" alt="@product.Name" />
+                <img src="@Url.Content(product.ImageUrl)" class="card-img-top" alt="@product.Name" loading="eager"/>
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">@product.Name</h5>
                     <p class="card-text">@product.Description</p>
@@ -48,3 +53,45 @@
         </ul>
     </nav>
 </div>
+</div>
+
+<style>
+    .spinner-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+
+    /* Loading text styles */
+    .loading-text {
+        font-size: 1.2rem;
+        color: #333;
+        margin-bottom: 10px; /* Space between text and spinner */
+    }
+
+    /* Spinner styles */
+    .spinner {
+        width: 50px;
+        height: 50px;
+        border: 8px solid rgba(0, 0, 0, 0.1);
+        border-top-color: #3498db;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: auto;
+    }
+
+    /* Spinner animation */
+    @@keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+</style>
+
+<script>
+    window.addEventListener('load', function() {
+        document.getElementById('loading-spinner').style.display = 'none';
+        document.getElementById('content').style.display = 'block';
+    });
+</script>
